@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 水滴刷新控件样式 -->
+    <declare-styleable name="WaveSwipRefresh">
+        <attr name="shadowColor" format="color" />
+        <attr name="shadowSize" format="dimension" />
+        <attr name="mainColor" format="color" />
+        <attr name="refreshColor" format="color" />
+    </declare-styleable>
+</resources>

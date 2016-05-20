@@ -1,4 +1,4 @@
-package com.yan.hahademo;
+package com.yan.haha;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

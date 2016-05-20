@@ -1,6 +1,7 @@
-package com.yan.hahademo;
+package com.yan.haha;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;

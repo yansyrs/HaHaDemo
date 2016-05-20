@@ -1,4 +1,4 @@
-package com.yan.hahademo;
+package com.yan.haha;
 
 import org.junit.Test;
 
