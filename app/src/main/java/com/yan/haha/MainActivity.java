@@ -1,4 +1,4 @@
-package haha.yan.com.hahademo;
+package com.yan.hahademo;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

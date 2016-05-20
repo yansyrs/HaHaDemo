@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "haha.yan.com.hahademo"
+        applicationId "com.yan.hahademo"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1

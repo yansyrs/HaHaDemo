@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="haha.yan.com.hahademo">
+    package="com.yan.hahademo">
 
     <application
         android:allowBackup="true"
