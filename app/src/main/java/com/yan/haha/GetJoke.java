@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Created by Leung on 2016/5/20.
  */
-public class GetJoke extends AsyncTask<String, Void, Void> {
+public class GetJoke extends AsyncTask<Void, Void, Void> {
     public static final String DEF_CHATSET = "UTF-8";
     public static final int DEF_CONN_TIMEOUT = 30000;
     public static final int DEF_READ_TIMEOUT = 30000;
@@ -50,7 +50,7 @@ public class GetJoke extends AsyncTask<String, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(String... urls) {
+    protected Void doInBackground(Void... v) {
         try {
             requestJoke();
         } catch (Exception e) {
