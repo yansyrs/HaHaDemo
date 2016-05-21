@@ -4,6 +4,7 @@ package com.yan.haha;
  * Created by Leung on 2016/5/21.
  */
 public class Horoscope {
+    private String type;
     private String name;
     private String dateTime;
     private String allPoints;
@@ -22,9 +23,10 @@ public class Horoscope {
     private String year;
 
     //星座运程:today,tomorrow
-    public Horoscope(String name, String dateTime, String allPoints, String QFriend, String color,
+    public Horoscope(String type, String name, String dateTime, String allPoints, String QFriend, String color,
                      String health, String love, String money, String luckyNum, String summary, String work) {
         super();
+        this.type = type;
         this.name = name;
         this.dateTime = dateTime;
         this.allPoints = allPoints;
@@ -39,9 +41,10 @@ public class Horoscope {
     }
 
     //星座运程:week, nextweek
-    public Horoscope(String name, String dateTime, String health, String job, String love,
+    public Horoscope(String type, String name, String dateTime, String health, String job, String love,
                      String money, String weekth, String work) {
         super();
+        this.type = type;
         this.name = name;
         this.dateTime = dateTime;
         this.health = health;
@@ -53,9 +56,10 @@ public class Horoscope {
     }
 
     //星座运程:month
-    public Horoscope(String name, String dateTime, String allPoints, String health, String love,
+    public Horoscope(String type, String name, String dateTime, String allPoints, String health, String love,
                      String money, String work) {
         super();
+        this.type = type;
         this.name = name;
         this.dateTime = dateTime;
         this.allPoints = allPoints;
@@ -66,9 +70,10 @@ public class Horoscope {
     }
 
     //星座运程:year
-    public Horoscope(String name, String dateTime, String year, String summary, String summaryTitle,
+    public Horoscope(String type, String name, String dateTime, String year, String summary, String summaryTitle,
                      String work, String love, String health, String money, String luckyStone) {
         super();
+        this.type = type;
         this.name = name;
         this.dateTime = dateTime;
         this.year = year;
@@ -79,6 +84,13 @@ public class Horoscope {
         this.health = health;
         this.money = money;
         this.luckyStone = luckyStone;
+    }
+
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getName() {
