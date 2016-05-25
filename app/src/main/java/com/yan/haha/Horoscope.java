@@ -13,18 +13,17 @@ public class Horoscope {
     private String health;
     private String love;
     private String money;
-    private String luckyNum;
+    private int luckyNum;
     private String summary;
     private String summaryTitle;
     private String work;
     private String job;
     private String weekth;
     private String luckyStone;
-    private String year;
 
     //星座运程:today,tomorrow
     public Horoscope(String type, String name, String dateTime, String allPoints, String QFriend, String color,
-                     String health, String love, String money, String luckyNum, String summary, String work) {
+                     String health, String love, String money, int luckyNum, String summary, String work) {
         super();
         this.type = type;
         this.name = name;
@@ -70,13 +69,12 @@ public class Horoscope {
     }
 
     //星座运程:year
-    public Horoscope(String type, String name, String dateTime, String year, String summary, String summaryTitle,
+    public Horoscope(String type, String name, String dateTime, String summary, String summaryTitle,
                      String work, String love, String health, String money, String luckyStone) {
         super();
         this.type = type;
         this.name = name;
         this.dateTime = dateTime;
-        this.year = year;
         this.summary = summary;
         this.summaryTitle = summaryTitle;
         this.work = work;
@@ -149,10 +147,10 @@ public class Horoscope {
         this.money = money;
     }
 
-    public String getLuckyNum() {
+    public int getLuckyNum() {
         return luckyNum;
     }
-    public void setLuckyNum(String luckyNum) {
+    public void setLuckyNum(int luckyNum) {
         this.luckyNum = luckyNum;
     }
 
@@ -198,10 +196,4 @@ public class Horoscope {
         this.luckyStone = luckyStone;
     }
 
-    public String getYear() {
-        return year;
-    }
-    public void setYear(String year) {
-        this.year = year;
-    }
 }
