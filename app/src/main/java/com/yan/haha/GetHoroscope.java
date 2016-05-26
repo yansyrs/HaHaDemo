@@ -143,12 +143,12 @@ public class GetHoroscope extends AsyncTask<Void, Void, Void> {
                         break;
                     case "year":
                         dateTime = myObject.getString("date");
-                        summary = myObject.getJSONObject("mima").getString("text");
+                        summary = myObject.getJSONObject("mima").getJSONArray("text").getString(0);
                         summaryTitle = myObject.getJSONObject("mima").getString("info");
-                        work = myObject.getString("career");
-                        love = myObject.getString("love");
-                        health = myObject.getString("health");
-                        money = myObject.getString("finance");
+                        work = myObject.getJSONArray("career").getString(0);
+                        love = myObject.getJSONArray("love").getString(0);
+                        health = myObject.getJSONArray("health").getString(0);
+                        money = myObject.getJSONArray("finance").getString(0);
                         luckyStone = myObject.getString("luckyStone");
                         horoscopeObject = new Horoscope(type, consName, dateTime, summary, summaryTitle,
                                 work, love, health, money, luckyStone);
