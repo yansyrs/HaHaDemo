@@ -1,4 +1,4 @@
-package com.yan.haha;
+package com.yan.haha.utils;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.yan.haha.units.Jokes;
+import com.yan.haha.OnDataFinishedListener;
 
 /**
  * Created by Leung on 2016/5/20.
