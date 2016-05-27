@@ -39,18 +39,22 @@ public class GetHoroscope extends AsyncTask<Void, Void, Void> {
     private String type;
     private String consName;
     private String dateTime;
-    private String allPoints;
+    private String complexPoints;
     private String QFriend;
     private String color;
     private String health;
+    private String healthPoints;
     private String love;
+    private String lovePoints;
     private String money;
+    private String moneyPoints;
     private int luckyNum;
     private String summary;
     private String summaryTitle;
     private String work;
+    private String workPoints;
     private String job;
-    private String weekth;
+    private int weekth;
     private String luckyStone;
 
     public GetHoroscope(String type, String consName) {
@@ -104,17 +108,17 @@ public class GetHoroscope extends AsyncTask<Void, Void, Void> {
                     case "today":
                     case "tomorrow":
                         dateTime = myObject.getString("datetime");
-                        allPoints = myObject.getString("all");
+                        complexPoints = myObject.getString("all");
                         QFriend = myObject.getString("QFriend");
                         color = myObject.getString("color");
-                        health = myObject.getString("health");
-                        love = myObject.getString("love");
-                        money = myObject.getString("money");
+                        healthPoints = myObject.getString("health");
+                        lovePoints = myObject.getString("love");
+                        moneyPoints = myObject.getString("money");
                         luckyNum = myObject.getInt("number");
                         summary = myObject.getString("summary");
-                        work = myObject.getString("work");
-                        horoscopeObject = new Horoscope(type, consName, dateTime, allPoints, QFriend,
-                                color, health, love, money, luckyNum, summary, work);
+                        workPoints = myObject.getString("work");
+                        horoscopeObject = new Horoscope(type, consName, dateTime, complexPoints, QFriend,
+                                color, healthPoints, lovePoints, moneyPoints, luckyNum, summary, workPoints);
                         horoscopeArray.add(horoscopeObject);
                         break;
                     case "week":
@@ -124,20 +128,20 @@ public class GetHoroscope extends AsyncTask<Void, Void, Void> {
                         job = myObject.getString("job");
                         love = myObject.getString("love");
                         money = myObject.getString("money");
-                        weekth = myObject.getString("weekth");
+                        weekth = myObject.getInt("weekth");
                         work = myObject.getString("work");
                         horoscopeObject = new Horoscope(type, consName, dateTime, health, job,
-                                money, weekth, work);
+                                love, money, weekth, work);
                         horoscopeArray.add(horoscopeObject);
                         break;
                     case "month":
                         dateTime = myObject.getString("date");
-                        allPoints = myObject.getString("all");
+                        summary = myObject.getString("all");
                         health = myObject.getString("health");
                         love = myObject.getString("love");
                         money = myObject.getString("money");
                         work = myObject.getString("work");
-                        horoscopeObject = new Horoscope(type, consName, dateTime, allPoints, health,
+                        horoscopeObject = new Horoscope(type, consName, dateTime, summary, health,
                                 love, money, work);
                         horoscopeArray.add(horoscopeObject);
                         break;
