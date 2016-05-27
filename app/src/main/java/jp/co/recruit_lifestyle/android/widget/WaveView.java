@@ -237,7 +237,7 @@ public class WaveView extends View implements ViewTreeObserver.OnPreDrawListener
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     mWidth = w;
     mDropCircleRadius = w / 14.4f;
-    updateMaxDropHeight((int) Math.min(Math.min(w, h), getHeight() - mDropCircleRadius));
+    updateMaxDropHeight((int) Math.min(Math.max(getHeight() / 2, 500)/*Math.min(w, h)*/, getHeight() - mDropCircleRadius));
     super.onSizeChanged(w, h, oldw, oldh);
   }
 
@@ -583,7 +583,7 @@ public class WaveView extends View implements ViewTreeObserver.OnPreDrawListener
   /**
    * @param h 波が始まる高さ
    */
-  public void startWaveAnimation(float h) {
+  public void startWaveAnimation(float h, final WaveSwipeRefreshLayout.DragListener listener) {
     h = Math.min(h, MAX_WAVE_HEIGHT) * mWidth;
     mWaveReverseAnimator = ValueAnimator.ofFloat(h, 0.f);
     mWaveReverseAnimator.setDuration(WAVE_ANIMATOR_DURATION);
@@ -597,6 +597,26 @@ public class WaveView extends View implements ViewTreeObserver.OnPreDrawListener
         postInvalidate();
       }
     });
+    mWaveReverseAnimator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        if (listener != null) {
+          listener.onDragFinish();
+        }
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+      }
+    });
     mWaveReverseAnimator.setInterpolator(new BounceInterpolator());
     mWaveReverseAnimator.start();
   }
@@ -606,7 +626,7 @@ public class WaveView extends View implements ViewTreeObserver.OnPreDrawListener
       return;
     }
     startDropAnimation();
-    startWaveAnimation(0.1f);
+    startWaveAnimation(0.1f, null);
   }
 
   public float getCurrentCircleCenterY() {

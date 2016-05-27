@@ -16,6 +16,7 @@
 
 package jp.co.recruit_lifestyle.android.widget;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
@@ -27,6 +28,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -116,6 +118,11 @@ public class WaveSwipeRefreshLayout extends ViewGroup
   private static final float SHADOW_SIZE = 5f;
   private float mShadowSize = SHADOW_SIZE;
 
+  /**
+   * 水滴拖拽
+   */
+  private DragListener mDragListener = null;
+
   private View mTarget;
 
   /**
@@ -201,6 +208,10 @@ public class WaveSwipeRefreshLayout extends ViewGroup
     } finally {
       a.recycle();
     }
+  }
+
+  public void setOnDragListener(DragListener listener) {
+    mDragListener = listener;
   }
 
   private void createProgressView() {
@@ -397,6 +408,8 @@ public class WaveSwipeRefreshLayout extends ViewGroup
     float secondBounds = firstBounds - VERTICAL_DRAG_THRESHOLD.FIRST.val;
     float finalBounds = (firstBounds - VERTICAL_DRAG_THRESHOLD.SECOND.val) / 5;
 
+    boolean dropPhase = false;
+
     if (firstBounds < VERTICAL_DRAG_THRESHOLD.FIRST.val) {
       // draw a wave and not draw a circle
       onBeginPhase(firstBounds);
@@ -409,6 +422,13 @@ public class WaveSwipeRefreshLayout extends ViewGroup
     } else {
       // stop to draw a wave and drop a circle
       onDropPhase();
+      dropPhase = true;
+    }
+
+    if (mDragListener != null) {
+      if (!dropPhase) {
+        mDragListener.onDragBegin();
+      }
     }
 
     return !mIsBeingDropped;
@@ -446,6 +466,18 @@ public class WaveSwipeRefreshLayout extends ViewGroup
             mWaveView.getCurrentCircleCenterY() + mCircleView.getHeight() / 2.f);
       }
     });
+    animator.addListener(new Animator.AnimatorListener(){
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        if (mDragListener != null) {
+          mDragListener.onDragFinish();
+        }
+      }
+
+      public void onAnimationCancel(Animator animation) {}
+      public void onAnimationRepeat(Animator animation) {}
+      public void onAnimationStart(Animator animation) {}
+    });
     animator.start();
     setRefreshing(true, true);
     mIsBeingDropped = true;
@@ -479,7 +511,7 @@ public class WaveSwipeRefreshLayout extends ViewGroup
         final float diffY = event.getY() - mFirstTouchDownPointY;
         final float waveHeightThreshold =
             diffY * (5f - 2 * diffY / Math.min(getMeasuredWidth(), getMeasuredHeight())) / 1000f;
-        mWaveView.startWaveAnimation(waveHeightThreshold);
+        mWaveView.startWaveAnimation(waveHeightThreshold, mDragListener);
 
       case MotionEvent.ACTION_CANCEL:
         if (mActivePointerId == INVALID_POINTER) {
