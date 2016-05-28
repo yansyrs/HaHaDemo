@@ -1,4 +1,4 @@
-package com.yan.haha.com.yan.haha.utils;
+package com.yan.haha.utils;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

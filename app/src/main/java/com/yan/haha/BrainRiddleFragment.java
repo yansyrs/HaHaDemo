@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yan.haha.com.yan.haha.adapter.BrainRiddleAdapter;
+import com.yan.haha.adapter.BrainRiddleAdapter;
+import com.yan.haha.units.BrainRiddle;
+import com.yan.haha.utils.GetBrainRiddle;
 
 import java.util.ArrayList;
 

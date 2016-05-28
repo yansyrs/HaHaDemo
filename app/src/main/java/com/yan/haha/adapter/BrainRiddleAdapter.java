@@ -1,4 +1,4 @@
-package com.yan.haha.com.yan.haha.adapter;
+package com.yan.haha.adapter;
 
 import android.animation.Animator;
 import android.os.Build;
@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
-import com.yan.haha.BrainRiddle;
 import com.yan.haha.R;
-import com.yan.haha.com.yan.haha.utils.Utils;
+import com.yan.haha.utils.Utils;
+import com.yan.haha.units.BrainRiddle;
 
 import java.util.ArrayList;
 
