@@ -6,4 +6,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="brain_riddle_icon">32dp</dimen>
+    <dimen name="brain_riddle_answer_icon">32dp</dimen>
+    <dimen name="brain_riddle_save_icon">24dp</dimen>
 </resources>

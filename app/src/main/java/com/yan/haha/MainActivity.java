@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-            replaceContentFragment(new WaveSwipeSampleFragment());
+            replaceContentFragment(new BrainRiddleFragment());
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

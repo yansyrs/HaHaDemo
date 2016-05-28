@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="6dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/brain_riddle_unexpanded"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="@dimen/brain_riddle_icon"
+            android:layout_height="@dimen/brain_riddle_icon"
+            android:src="@drawable/ic_brain_riddle_question" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/brain_riddle_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="月圆之夜，全世界的鬼魂都聚集在一起开狂欢大会，偏偏只有狼人没有到，为什么？" />
+
+            <TextView
+                android:id="@+id/brain_riddle_answer_2"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="狼人是妖怪不是鬼" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/brain_riddle_expanded"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:background="@color/brain_riddle_list_item_expanded"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/brain_riddle_answer_icon"
+            android:layout_width="@dimen/brain_riddle_answer_icon"
+            android:layout_height="@dimen/brain_riddle_answer_icon"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_brain_riddle_answer" />
+
+        <TextView
+            android:id="@+id/brain_riddle_answer"
+            android:textColor="#ffffff"
+            android:layout_toRightOf="@id/brain_riddle_answer_icon"
+            android:layout_toEndOf="@id/brain_riddle_answer_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="狼人是妖怪不是鬼" />
+
+        <ImageView
+            android:id="@+id/brain_riddle_save"
+            android:layout_width="@dimen/brain_riddle_save_icon"
+            android:layout_height="@dimen/brain_riddle_save_icon"
+            android:src="@drawable/ic_favorite_white"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+</FrameLayout>
