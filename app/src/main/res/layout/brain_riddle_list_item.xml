@@ -42,7 +42,7 @@
     <RelativeLayout
         android:id="@+id/brain_riddle_expanded"
         android:padding="10dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:background="@color/brain_riddle_list_item_expanded"
         android:layout_height="match_parent">
@@ -61,6 +61,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
+            android:paddingRight="26dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="狼人是妖怪不是鬼" />
