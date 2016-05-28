@@ -1,4 +1,4 @@
-package com.yan.haha;
+package com.yan.haha.utils;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -16,10 +16,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.yan.haha.units.BrainRiddle;
+import com.yan.haha.OnDataFinishedListener;
 
 /**
  * Created by Leung on 2016/5/20.
@@ -77,7 +78,6 @@ public class GetBrainRiddle extends AsyncTask<Void, Void, Void> {
 
     public void requestBrainRiddle() {
         String result = null;
-        String afterReplaceString = "";
         String url = "http://ok511.party:2333/brain";//请求接口地址
         Map params = new HashMap();//请求参数
         params.put("random", randomNum);//随机返回，数量由传入参数决定

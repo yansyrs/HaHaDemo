@@ -1,4 +1,4 @@
-package com.yan.haha;
+package com.yan.haha.units;
 
 
 public class Jokes {

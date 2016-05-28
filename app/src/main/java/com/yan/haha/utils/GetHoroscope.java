@@ -1,4 +1,4 @@
-package com.yan.haha;
+package com.yan.haha.utils;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -16,10 +16,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.yan.haha.units.Horoscope;
+import com.yan.haha.OnDataFinishedListener;
 
 /**
  * Created by Leung on 2016/5/20.
