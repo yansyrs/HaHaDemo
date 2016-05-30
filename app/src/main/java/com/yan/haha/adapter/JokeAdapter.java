@@ -249,4 +249,10 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
         ViewHolder holder = mHolderList.get(position);
         sweepAnimation(holder.mLayoutView, finishCallback);
     }
+
+    public void refresh() {
+        mLastBindPosition = -1;
+        mCurrExpandedPosition = -1;
+        notifyDataSetChanged();
+    }
 }

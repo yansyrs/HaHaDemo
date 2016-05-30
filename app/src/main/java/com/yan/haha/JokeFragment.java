@@ -72,8 +72,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
         mJokeData.clear();
         mJokeData.addAll(result);
         mAdapter.setJokeList(mJokeData);
-        mAdapter.notifyDataSetChanged();
-        mJokeList.scrollToPosition(0);
+        mAdapter.refresh();
     }
 
     @Override
