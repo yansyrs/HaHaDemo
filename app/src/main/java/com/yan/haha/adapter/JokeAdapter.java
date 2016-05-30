@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import com.yan.haha.utils.Utils;
 
 import java.util.ArrayList;
 
-public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
+public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> implements View.OnTouchListener {
     private ArrayList<Jokes> mJokeData = new ArrayList<Jokes>();
     private ArrayList<ViewHolder> mHolderList = new ArrayList<ViewHolder>();
 
@@ -36,6 +37,8 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
 
     private View mPreExpandedView = null;
     private int mCurrExpandedPosition = -1;
+    private int positionX;
+    private int positionY;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ViewGroup mLayoutView = null;
@@ -65,6 +68,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
                 R.layout.joke_list_item, parent, false);
 
         ViewHolder vh = new ViewHolder((ViewGroup) v);
+        v.setOnTouchListener(this);
         return vh;
     }
 
@@ -127,7 +131,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
     private void expandView(final View view, int width, int height) {
         if (Build.VERSION.SDK_INT >= 21 && view.isAttachedToWindow()) {
             Animator anim = ViewAnimationUtils.createCircularReveal(
-                    view, width / 2, height / 2, 0, width);
+                    view, positionX, positionY, 0, width);
             anim.setDuration(CIRCULAR_REVEAL_DURATION);
             anim.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -185,6 +189,15 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
             mPreExpandedView = null;
             mCurrExpandedPosition = -1;
         }
+    }
+
+    @Override
+    public boolean onTouch(View v,MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            positionX = (int)event.getX();
+            positionY = (int)event.getY();
+        }
+        return false;
     }
 
     @Override
