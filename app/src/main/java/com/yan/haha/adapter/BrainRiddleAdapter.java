@@ -265,6 +265,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
 
     public void refresh() {
         mLastBindPosition = -1;
+        mCurrExpandedPosition = -1;
         notifyDataSetChanged();
     }
 }
