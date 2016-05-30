@@ -26,6 +26,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
     private static final int CIRCULAR_REVEAL_DURATION = 500;
     private static final int RUN_UP_ANI_DURATION = 700;
     private static final int RUN_UP_ANI_TIME_GAP = 200;
+
     private int mGoUpDuration = RUN_UP_ANI_DURATION;
 
     private final static int MSG_ID_RESET_GO_UP_ANI_STATE = 0;
@@ -196,17 +197,29 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         TextView question = (TextView) container.findViewById(R.id.brain_riddle_question);
         TextView answer = (TextView) container.findViewById(R.id.brain_riddle_answer);
         TextView answer2 = (TextView) container.findViewById(R.id.brain_riddle_answer_2);
+        View unexpandView = container.findViewById(R.id.brain_riddle_unexpanded);
         View expandView = container.findViewById(R.id.brain_riddle_expanded);
+        View sep = container.findViewById(R.id.brain_riddle_sep);
 
-        if (position == mCurrExpandedPosition) {
-            expandView.setVisibility(View.VISIBLE);
-            mPreExpandedView = expandView;
-        } else {
+        if (mBrainData.get(position) == null) {
+            unexpandView.setVisibility(View.GONE);
             expandView.setVisibility(View.GONE);
+            sep.setVisibility(View.VISIBLE);
+            sep.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        } else {
+            unexpandView.setVisibility(View.VISIBLE);
+            sep.setVisibility(View.GONE);
+
+            if (position == mCurrExpandedPosition) {
+                expandView.setVisibility(View.VISIBLE);
+                mPreExpandedView = expandView;
+            } else {
+                expandView.setVisibility(View.GONE);
+            }
+            question.setText(mBrainData.get(position).getQuestion());
+            answer.setText(mBrainData.get(position).getAnswer());
+            answer2.setText(mBrainData.get(position).getAnswer());
         }
-        question.setText(mBrainData.get(position).getQuestion());
-        answer.setText(mBrainData.get(position).getAnswer());
-        answer2.setText(mBrainData.get(position).getAnswer());
 
         // 恢复删除 item 时用到的 tran x
         container.setTranslationX(0);
@@ -248,5 +261,11 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         mDelPosMark = position;
         ViewHolder holder = mHolderList.get(position);
         sweepAnimation(holder.mLayoutView, finishCallback);
+    }
+
+    public void refresh() {
+        mLastBindPosition = -1;
+        mCurrExpandedPosition = -1;
+        notifyDataSetChanged();
     }
 }

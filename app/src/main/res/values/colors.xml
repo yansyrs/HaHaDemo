@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="gray">#D5D5D5</color>
 
     <color name="brain_riddle_list_bg">#E9E9E9</color>
     <color name="brain_riddle_list_item_expanded">#384248</color>

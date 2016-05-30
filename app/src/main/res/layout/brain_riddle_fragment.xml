@@ -16,4 +16,12 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/stat_notify_sync" />
+
+    <ImageView
+        android:id="@+id/brain_riddle_loading"
+        android:tint="@color/colorAccent"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/stat_notify_sync" />
 </FrameLayout>
