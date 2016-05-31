@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -186,7 +185,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 switch (i) {
                     //滑到底部并且松开手之后，自动弹出 FloatingActionButton
-                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                    case RecyclerView.SCROLL_STATE_IDLE:
                         if(!recyclerView.canScrollVertically(1)) {
                             showFAB();
                         }
