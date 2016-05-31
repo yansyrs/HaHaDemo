@@ -85,8 +85,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_brain_riddles) {
             // 脑筋急转弯
             replaceContentFragment(new BrainRiddleFragment());
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.nav_jokes) {
+            // 冷笑话
+            replaceContentFragment(new JokeFragment());
         } else if (id == R.id.nav_slideshow) {
             // 星座
             replaceContentFragment(new HoroscopeFragment());

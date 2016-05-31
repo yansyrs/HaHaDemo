@@ -7,9 +7,9 @@
             android:icon="@drawable/ic_menu_brain_riddle"
             android:title="@string/brain_riddles" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_jokes"
+            android:icon="@drawable/ic_menu_jokes"
+            android:title="@string/jokes" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
