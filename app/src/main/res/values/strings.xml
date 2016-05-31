@@ -11,5 +11,5 @@
 
     <string name="brain_riddles">Brain riddles</string>
     <string name="jokes">Jokes</string>
-    <string name="publish_time">Publish Time</string>
+    <string name="publish_time">Publish Time:</string>
 </resources>

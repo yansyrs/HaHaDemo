@@ -5,9 +5,9 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/joke_list"
-        android:background="@color/brain_riddle_list_bg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/brain_riddle_list_bg" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/joke_fab"
@@ -16,4 +16,13 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/stat_notify_sync" />
+
+
+    <ImageView
+        android:id="@+id/joke_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@android:drawable/stat_notify_sync"
+        android:tint="@color/colorAccent" />
 </FrameLayout>

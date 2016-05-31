@@ -5,12 +5,15 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Transformation;
 import android.widget.TextView;
 
 import com.yan.haha.R;
@@ -23,7 +26,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     private ArrayList<Jokes> mJokeData = new ArrayList<Jokes>();
     private ArrayList<ViewHolder> mHolderList = new ArrayList<ViewHolder>();
 
-    private static final int CIRCULAR_REVEAL_DURATION = 500;
+    private static final int CIRCULAR_REVEAL_DURATION = 400;
     private static final int RUN_UP_ANI_DURATION = 700;
     private static final int RUN_UP_ANI_TIME_GAP = 200;
     private int mGoUpDuration = RUN_UP_ANI_DURATION;
@@ -39,6 +42,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     private int mCurrExpandedPosition = -1;
     private int positionX;
     private int positionY;
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ViewGroup mLayoutView = null;
@@ -143,7 +147,34 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                 public void onAnimationCancel(Animator animation) {}
                 public void onAnimationRepeat(Animator animation) {}
             });
+
+
+            view.measure(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+            final int targetHeight = view.getMeasuredHeight();
+
+            // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+            view.getLayoutParams().height = 1;
+            view.setVisibility(View.VISIBLE);
+            Animation a = new Animation()
+            {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    view.getLayoutParams().height = interpolatedTime == 1
+                            ? RecyclerView.LayoutParams.WRAP_CONTENT
+                            : (int)(targetHeight * interpolatedTime);
+                    view.requestLayout();
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            // 1dp/ms
+            a.setDuration((int)(targetHeight / view.getContext().getResources().getDisplayMetrics().density));
             anim.start();
+            view.startAnimation(a);
         } else {
             view.setVisibility(View.VISIBLE);
         }
@@ -152,19 +183,41 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     private void collapseView(final View view, int width, int height) {
         if (Build.VERSION.SDK_INT >= 21 && view.isAttachedToWindow()) {
             Animator anim = ViewAnimationUtils.createCircularReveal(
-                    view, width / 2, height / 2, width, 0);
+                    view, width, height, width, 0);
             anim.setDuration(CIRCULAR_REVEAL_DURATION);
             anim.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     view.setVisibility(View.GONE);
                 }
-
                 public void onAnimationStart(Animator animation) {}
                 public void onAnimationCancel(Animator animation) {}
                 public void onAnimationRepeat(Animator animation) {}
             });
+
+            final int initialHeight = view.getMeasuredHeight();
+            Animation a = new Animation()
+            {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if(interpolatedTime == 1){
+                        view.setVisibility(View.GONE);
+                    }else{
+                        view.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                        view.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+            // 1dp/ms
+            a.setDuration((int)(initialHeight / view.getContext().getResources().getDisplayMetrics().density));
+
             anim.start();
+            view.startAnimation(a);
         } else {
             view.setVisibility(View.GONE);
         }
@@ -176,7 +229,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         int height = contentView.getHeight();
         int width = contentView.getWidth();
         if (mPreExpandedView != null) {
-            collapseView(mPreExpandedView, width, height);
+            collapseView(mPreExpandedView, width/2, height/2);
         }
         if (ExpandedJokeView.getVisibility() == View.GONE) {
             // 显示笑话详情
@@ -185,7 +238,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             mCurrExpandedPosition = position;
         } else {
             // 收起详情
-            collapseView(ExpandedJokeView, width, height);
+            collapseView(ExpandedJokeView, positionX, height/2);
             mPreExpandedView = null;
             mCurrExpandedPosition = -1;
         }
@@ -209,16 +262,28 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         TextView detail = (TextView) container.findViewById(R.id.joke_detail);
         TextView date = (TextView) container.findViewById(R.id.joke_date);
         View expandView = container.findViewById(R.id.joke_expanded);
+        View unexpandView = container.findViewById(R.id.joke_unexpanded);
+        View sep = container.findViewById(R.id.joke_sep);
 
-        if (position == mCurrExpandedPosition) {
-            expandView.setVisibility(View.VISIBLE);
-            mPreExpandedView = expandView;
-        } else {
+        if (mJokeData.get(position) == null) {
+            unexpandView.setVisibility(View.GONE);
             expandView.setVisibility(View.GONE);
+            sep.setVisibility(View.VISIBLE);
+            sep.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        } else {
+            unexpandView.setVisibility(View.VISIBLE);
+            sep.setVisibility(View.GONE);
+
+            if (position == mCurrExpandedPosition) {
+                expandView.setVisibility(View.VISIBLE);
+                mPreExpandedView = expandView;
+            } else {
+                expandView.setVisibility(View.GONE);
+            }
+            title.setText(mJokeData.get(position).getTitle());
+            detail.setText(mJokeData.get(position).getBody());
+            date.setText(mJokeData.get(position).getPubDate());
         }
-        title.setText(mJokeData.get(position).getTitle());
-        detail.setText(mJokeData.get(position).getBody());
-        date.setText(mJokeData.get(position).getPubDate());
 
 
         // 恢复删除 item 时用到的 tran x
