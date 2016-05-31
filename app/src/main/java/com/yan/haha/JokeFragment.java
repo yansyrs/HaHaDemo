@@ -181,17 +181,6 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
                 }
                 super.onScrolled(recyclerView, dx, dy);
             }
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                switch (i) {
-                    //滑到底部并且松开手之后，自动弹出 FloatingActionButton
-                    case RecyclerView.SCROLL_STATE_IDLE:
-                        if(!recyclerView.canScrollVertically(1)) {
-                            showFAB();
-                        }
-                        break;
-                }
-            }
         });
     }
 
