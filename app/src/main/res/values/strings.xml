@@ -8,6 +8,9 @@
 
     <string name="load_success">Load successfully.</string>
     <string name="load_failed">Load unsuccessfully!</string>
+    <string name="share">Share</string>
+    <string name="more">More</string>
+    <string name="reload">Reload</string>
 
     <string name="brain_riddles">Brain riddles</string>
 </resources>

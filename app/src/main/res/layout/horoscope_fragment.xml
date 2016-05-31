@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/horoscope_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp" >
+
+        <ImageView
+            android:id="@+id/horoscope_bg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/horoscope_card_img_height"
+            android:scaleType="centerCrop"
+            android:src="@drawable/horoscope_bg_1" />
+
+        <ImageView
+            android:id="@+id/horoscope_avatar"
+            android:layout_width="@dimen/horoscope_card_avatar_size"
+            android:layout_height="@dimen/horoscope_card_avatar_size"
+            android:layout_marginTop="@dimen/horoscope_card_avatar_margin_top"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_horoscope_pisces_2" />
+
+        <TextView
+            android:id="@+id/horoscope_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/horoscope_card_title_margin_top"
+            android:layout_marginLeft="@dimen/horoscropt_card_title_margin_left"
+            android:layout_marginStart="@dimen/horoscropt_card_title_margin_left"
+            android:textSize="@dimen/horoscope_card_title_size"
+            android:textColor="@color/white"
+            android:shadowColor="@color/text_gray"
+            android:shadowDx="1"
+            android:shadowDy="2"
+            android:shadowRadius="5"
+            android:text="双鱼座今日综合评价" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/horoscope_card_img_height" >
+
+            <TextView
+                android:id="@+id/horoscope_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="这段时间里对自己的工作相当聚焦，只要一心一意对待就能有不错的效率，今天也是特别适合你学习的一天，看看业务知识是否已经有些淡忘，学习考试的狮子也请加油吧。" />
+
+            <Button
+                android:id="@+id/horoscope_share"
+                android:layout_below="@id/horoscope_summary"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/share"
+                android:textColor="@color/text_gray" />
+
+            <Button
+                android:id="@+id/horoscope_more"
+                android:layout_below="@id/horoscope_summary"
+                android:layout_toRightOf="@id/horoscope_share"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/more"
+                android:textColor="@color/colorAccent" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <ImageView
+        android:id="@+id/horoscope_loading"
+        android:visibility="gone"
+        android:tint="@color/colorAccent"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/stat_notify_sync" />
+
+    <Button
+        android:id="@+id/horoscope_reload"
+        android:visibility="gone"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/reload"
+        android:textColor="@color/colorAccent" />
+</FrameLayout>
