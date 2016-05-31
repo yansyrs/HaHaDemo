@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dolphinwang.imagecoverflow.CoverFlowView;
+import com.yan.haha.adapter.HoroscopeCoverFlowAdapter;
 import com.yan.haha.units.Horoscope;
 import com.yan.haha.utils.GetHoroscope;
 import com.yan.haha.utils.Utils;
@@ -32,6 +34,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     private Button mMoreBtn = null;
     private ImageView mLoadingImg = null;
     private Button mReloadBtn = null;
+    private CoverFlowView mCoverFlow = null;
 
     private String mHoroscopeName = "双鱼座";
 
@@ -165,6 +168,9 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         mLoadingImg = (ImageView) getActivity().findViewById(R.id.horoscope_loading);
         mReloadBtn = (Button) getActivity().findViewById(R.id.horoscope_reload);
 
+        mCoverFlow = (CoverFlowView) getActivity().findViewById(R.id.horoscope_coverflow);
+        mCoverFlow.setAdapter(new HoroscopeCoverFlowAdapter());
+
         mReloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,14 +187,12 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
 
     @Override
     public void onDataSuccessfully(Object data) {
-        Log.i("yan", "success");
         mHoroscope = ((ArrayList<Horoscope>)data).get(0);
         mLoadState = LoadState.LOAD_SUCCESS;
     }
 
     @Override
     public void onDataFailed() {
-        Log.i("yan", "failed");
         mLoadState = LoadState.LOAD_FAIL;
     }
 }
