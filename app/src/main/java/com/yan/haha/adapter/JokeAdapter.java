@@ -1,6 +1,8 @@
 package com.yan.haha.adapter;
 
 import android.animation.Animator;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -43,6 +45,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     private int mCurrExpandedPosition = -1;
     private int positionX;
     private int positionY;
+    private Context mContext;
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -61,6 +64,10 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     public JokeAdapter(ArrayList<Jokes> jokeList) {
         this();
         mJokeData = jokeList;
+    }
+
+    public JokeAdapter(Context context) {
+        this.mContext = context;
     }
 
     public void setJokeList(ArrayList<Jokes> jokeList) {
@@ -181,10 +188,10 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         }
     }
 
-    private void collapseView(final View view, int width, int height) {
+    private void collapseView(final View view, int width, int height, int radius) {
         if (Build.VERSION.SDK_INT >= 21 && view.isAttachedToWindow()) {
             Animator anim = ViewAnimationUtils.createCircularReveal(
-                    view, width, height, width, 0);
+                    view, width, height, radius, 0);
             anim.setDuration(CIRCULAR_REVEAL_DURATION);
             anim.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -230,7 +237,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         int height = contentView.getHeight();
         int width = contentView.getWidth();
         if (mPreExpandedView != null) {
-            collapseView(mPreExpandedView, width/2, height/2);
+            collapseView(mPreExpandedView, width/2, height/2, width);
         }
         if (ExpandedJokeView.getVisibility() == View.GONE) {
             // 显示笑话详情
@@ -239,7 +246,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             mCurrExpandedPosition = position;
         } else {
             // 收起详情
-            collapseView(ExpandedJokeView, positionX, height/2);
+            collapseView(ExpandedJokeView, positionX, height/2, width);
             mPreExpandedView = null;
             mCurrExpandedPosition = -1;
         }
@@ -289,6 +296,11 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                 @Override
                 public void onClick(View view) {
                     Log.d("leungadd", "onclick");
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, mJokeData.get(position).getBody());
+                    sendIntent.setType("text/plain");
+                    mContext.startActivity(sendIntent);
                 }
             });
         }

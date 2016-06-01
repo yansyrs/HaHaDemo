@@ -97,7 +97,7 @@ public class GetJoke extends AsyncTask<Void, Void, Void> {
         Map params = new HashMap();//请求参数
         params.put("sort", "desc");//类型，desc:指定时间之前发布的，asc:指定时间之后发布的
         params.put("page", requestPage);//准备获取的页数，默认是第1页
-        params.put("pagesize", "15");//每次返回条数,默认1,最大20
+        params.put("pagesize", "10");//每次返回条数,默认1,最大20
         params.put("time", new Date().getTime() / 1000);//时间戳（10位），如：1418816972
         params.put("key", APPKEY);//您申请的key
 
