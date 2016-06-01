@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_menu_jokes"
             android:title="@string/jokes" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_horoscope"
+            android:icon="@drawable/ic_menu_horoscope"
+            android:title="@string/horoscope" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

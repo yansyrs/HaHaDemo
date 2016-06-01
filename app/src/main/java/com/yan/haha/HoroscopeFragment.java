@@ -67,6 +67,64 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         return inflater.inflate(R.layout.horoscope_fragment, container, false);
     }
 
+    private void showCoverFlow() {
+        mCoverFlow.setScaleX(0f);
+        mCoverFlow.setScaleY(0f);
+        mCoverFlow.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setInterpolator(new DecelerateInterpolator(3f))
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        mCoverFlow.setVisibility(View.VISIBLE);
+                    }
+
+                    public void onAnimationEnd(Animator animation) {}
+                    public void onAnimationCancel(Animator animation) {}
+                    public void onAnimationRepeat(Animator animation) {}
+                })
+                .setDuration(500)
+                .start();
+    }
+
+    private void doGetHoroscopeSuccessfully() {
+        mLoadingImg.setVisibility(View.GONE);
+        int bgNum = Utils.getRandomNumber(1, 4);
+        int avatarNum = Utils.getRandomNumber(1, 2);
+        String name = mNameMap.get(mHoroscopeName);
+        int bgRes = Utils.getResourceIdByName(
+                "horoscope_bg_" + bgNum,
+                "drawable");
+        int avatarRes = Utils.getResourceIdByName(
+                "ic_horoscope_" + name + "_" + avatarNum,
+                "drawable");
+        mBgImg.setImageResource(bgRes);
+        mAvatarImg.setImageResource(avatarRes);
+        mSummary.setText(mHoroscope.getSummary());
+        mCard.setTranslationY(Utils.getScreenHeight());
+        mCard.animate()
+                .translationY(0f)
+                .setDuration(1000)
+                .setInterpolator(new DecelerateInterpolator(3f))
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        mCard.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (mCoverFlow.getVisibility() == View.GONE) {
+                            showCoverFlow();
+                        }
+                    }
+                    public void onAnimationCancel(Animator animation) {}
+                    public void onAnimationRepeat(Animator animation) {}
+                })
+                .start();
+    }
+
     private void doGetHoroscopeAnimate() {
         mLoadingImg.setVisibility(View.VISIBLE);
         mLoadingImg.setRotation(0f);
@@ -83,35 +141,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
                         } else if (mLoadState != LoadState.IDLE){
                             if (mLoadState == LoadState.LOAD_SUCCESS) {
                                 // 网络请求成功
-                                mLoadingImg.setVisibility(View.GONE);
-                                int bgNum = Utils.getRandomNumber(1, 4);
-                                int avatarNum = Utils.getRandomNumber(1, 2);
-                                String name = mNameMap.get(mHoroscopeName);
-                                int bgRes = Utils.getResourceIdByName(
-                                                    "horoscope_bg_" + bgNum,
-                                                    "drawable");
-                                int avatarRes = Utils.getResourceIdByName(
-                                        "ic_horoscope_" + name + "_" + avatarNum,
-                                        "drawable");
-                                mBgImg.setImageResource(bgRes);
-                                mAvatarImg.setImageResource(avatarRes);
-                                mSummary.setText(mHoroscope.getSummary());
-                                mCard.setTranslationY(Utils.getScreenHeight());
-                                mCard.animate()
-                                        .translationY(0f)
-                                        .setDuration(1000)
-                                        .setInterpolator(new DecelerateInterpolator(3f))
-                                        .setListener(new Animator.AnimatorListener() {
-                                            @Override
-                                            public void onAnimationStart(Animator animation) {
-                                                mCard.setVisibility(View.VISIBLE);
-                                            }
-
-                                            public void onAnimationEnd(Animator animation) {}
-                                            public void onAnimationCancel(Animator animation) {}
-                                            public void onAnimationRepeat(Animator animation) {}
-                                        })
-                                        .start();
+                                doGetHoroscopeSuccessfully();
                             } else if (mLoadState == LoadState.LOAD_FAIL){
                                 // 网络请求失败
                                 mLoadingImg.setVisibility(View.GONE);
@@ -183,6 +213,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         mCard.setVisibility(View.GONE);
         mLoadingImg.setVisibility(View.GONE);
         mReloadBtn.setVisibility(View.GONE);
+        mCoverFlow.setVisibility(View.GONE);
     }
 
     @Override
