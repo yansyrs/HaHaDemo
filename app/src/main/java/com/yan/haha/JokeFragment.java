@@ -1,6 +1,7 @@
 package com.yan.haha;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class JokeFragment extends ContentFragment implements OnDataFinishedListener {
     private RecyclerView mJokeList = null;
-    private JokeAdapter mAdapter = new JokeAdapter();
+    private JokeAdapter mAdapter = new JokeAdapter(MainActivity.getInstance());
     private ArrayList<Jokes> mJokeData = new ArrayList<Jokes>();
 
     private static int REQUEST_PAGE = 1;

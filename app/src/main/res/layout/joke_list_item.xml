@@ -95,7 +95,7 @@
             android:layout_below="@+id/joke_detail"
             android:paddingRight="26dp"
             android:layout_marginTop="64dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/colorAccent"
             style="?android:attr/buttonBarButtonStyle"
             android:text="@string/share"/>
     </RelativeLayout>
