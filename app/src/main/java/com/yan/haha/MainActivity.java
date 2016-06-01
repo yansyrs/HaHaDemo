@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity
             // 冷笑话
             replaceContentFragment(new JokeFragment());
         } else if (id == R.id.nav_slideshow) {
-
+            // 星座
+            replaceContentFragment(new HoroscopeFragment());
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
