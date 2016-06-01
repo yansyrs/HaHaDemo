@@ -39,7 +39,7 @@ public class GetJoke extends AsyncTask<Void, Void, Void> {
     private int requestPage;
     public static String TAG = "leungadd";
     private Jokes jokesObject;
-    public static List<Jokes> jokesArray = new ArrayList<Jokes>();
+    public List<Jokes> jokesArray = new ArrayList<Jokes>();
     OnDataFinishedListener onDataFinishedListener;
 
     public GetJoke (int requestPage) {
@@ -58,7 +58,6 @@ public class GetJoke extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... v) {
         try {
-            clearContent();
             requestJoke();
         } catch (Exception e) {
         }

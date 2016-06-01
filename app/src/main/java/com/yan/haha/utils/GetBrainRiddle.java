@@ -36,7 +36,7 @@ public class GetBrainRiddle extends AsyncTask<Void, Void, Void> {
     private int randomNum;
     public static String TAG = "leungadd";
     private BrainRiddle brainRiddleObject;
-    public static List<BrainRiddle> brainRiddleArray = new ArrayList<BrainRiddle>();
+    public List<BrainRiddle> brainRiddleArray = new ArrayList<BrainRiddle>();
     OnDataFinishedListener onDataFinishedListener;
 
     public GetBrainRiddle(int[] id) {
@@ -60,7 +60,6 @@ public class GetBrainRiddle extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... v) {
         try {
-            clearContent();
             requestBrainRiddle();
         } catch (Exception e) {
         }
