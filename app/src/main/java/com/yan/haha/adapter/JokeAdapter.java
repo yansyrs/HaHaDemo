@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.yan.haha.R;
@@ -264,7 +265,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         View expandView = container.findViewById(R.id.joke_expanded);
         View unexpandView = container.findViewById(R.id.joke_unexpanded);
         View sep = container.findViewById(R.id.joke_sep);
-
+        Button share = (Button) container.findViewById(R.id.joke_share);
         if (mJokeData.get(position) == null) {
             unexpandView.setVisibility(View.GONE);
             expandView.setVisibility(View.GONE);
@@ -283,6 +284,13 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             title.setText(mJokeData.get(position).getTitle());
             detail.setText(mJokeData.get(position).getBody());
             date.setText(mJokeData.get(position).getPubDate());
+
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("leungadd", "onclick");
+                }
+            });
         }
 
 
