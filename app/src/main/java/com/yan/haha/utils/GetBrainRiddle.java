@@ -34,7 +34,7 @@ public class GetBrainRiddle extends AsyncTask<Void, Void, Void> {
     public JSONObject myObject = null;
     private int[] id;
     private int randomNum;
-    public static String TAG = "leungadd";
+    public static String TAG = "GetBrainRiddle";
     private BrainRiddle brainRiddleObject;
     public static List<BrainRiddle> brainRiddleArray = new ArrayList<BrainRiddle>();
     OnDataFinishedListener onDataFinishedListener;

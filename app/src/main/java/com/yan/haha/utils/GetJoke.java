@@ -37,7 +37,7 @@ public class GetJoke extends AsyncTask<Void, Void, Void> {
     public org.json.JSONObject afterReplaceObject = null;
     public org.json.JSONObject finalJsonObject = null;
     private int requestPage;
-    public static String TAG = "leungadd";
+    public static String TAG = "GetJoke";
     private Jokes jokesObject;
     public static List<Jokes> jokesArray = new ArrayList<Jokes>();
     OnDataFinishedListener onDataFinishedListener;
@@ -87,7 +87,7 @@ public class GetJoke extends AsyncTask<Void, Void, Void> {
                 onDataFinishedListener.onDataFailed();
             }
         } catch (Exception e) {
-            Log.d(TAG, "getrequest2 exception " + e.toString());
+            e.printStackTrace();
         }
     }
 
