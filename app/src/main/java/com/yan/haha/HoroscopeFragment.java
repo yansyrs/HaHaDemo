@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -44,6 +45,8 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     private Button mReloadBtn = null;
     private TextView mName = null;
     private CoverFlowView mCoverFlow = null;
+    private ScrollView mScrollView = null;
+    private ViewGroup mScrollSelector = null;
 
     private String mHoroscopeName = "双鱼座";
 
@@ -133,7 +136,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
                 .setListener(null)
                 .setInterpolator(new DecelerateInterpolator(3f))
                 .start();
-        if (mCoverFlow.getVisibility() == View.GONE) {
+        if (mCoverFlow.getVisibility() == View.INVISIBLE) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -141,12 +144,29 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
                 }
             }, 600);
         }
+
+        // 判断是否有滚动条，如果没滚动条则将 mCoverFlow 靠底显示
+        Log.i("yan", "can scroll: " + Utils.canScroll(mScrollView));
+        if (!Utils.canScroll(mScrollView) && !Utils.isScreenLandscape()) {
+            //RelativeLayout rl = new RelativeLayout(getActivity());
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            mScrollSelector.setLayoutParams(params);
+        } else {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.BELOW, R.id.horoscope_card);
+            mScrollSelector.setLayoutParams(params);
+        }
     }
 
     private void doGetHoroscopeSuccessfully() {
-        boolean isFirstLoad = (mCard.getVisibility() == View.GONE);
-        mLoadingImg.setVisibility(View.GONE);
-        mLoadingFab.setVisibility(View.GONE);
+        boolean isFirstLoad = (mCard.getVisibility() == View.INVISIBLE);
+        mLoadingImg.setVisibility(View.INVISIBLE);
+        mLoadingFab.setVisibility(View.INVISIBLE);
 
         if (isFirstLoad) {
             showCard();
@@ -169,7 +189,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     }
 
     private void doGetHoroscopeAnimate() {
-        boolean isFirstLoad = (mCard.getVisibility() == View.GONE);
+        boolean isFirstLoad = (mCard.getVisibility() == View.INVISIBLE);
         final View mLoadingView = isFirstLoad ? mLoadingImg : mLoadingFab;
         mLoadingView.setVisibility(View.VISIBLE);
         mLoadingView.setRotation(0f);
@@ -189,7 +209,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
                                 doGetHoroscopeSuccessfully();
                             } else if (mLoadState == LoadState.LOAD_FAIL){
                                 // 网络请求失败
-                                mLoadingView.setVisibility(View.GONE);
+                                mLoadingView.setVisibility(View.INVISIBLE);
                                 mReloadBtn.setVisibility(View.VISIBLE);
                             }
                             mLoadState = LoadState.IDLE;
@@ -206,7 +226,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     private void doGetHoroscope() {
         if (mLoadState != LoadState.LOADING
                 && HoroscopeInfo.getLatinName(mHoroscopeName) != null) {
-            mReloadBtn.setVisibility(View.GONE);
+            mReloadBtn.setVisibility(View.INVISIBLE);
             mProcess = new GetHoroscope("today", mHoroscopeName);
             mProcess.setOnDataFinishedListener(this);
             mLoadState = LoadState.LOADING;
@@ -255,6 +275,9 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         mShareBtn = (Button) getActivity().findViewById(R.id.horoscope_share);
         mMoreBtn = (Button) getActivity().findViewById(R.id.horoscope_more);
 
+        mScrollView = (ScrollView) getActivity().findViewById(R.id.horoscope_scrollview);
+        mScrollSelector = (ViewGroup) getActivity().findViewById(R.id.horoscope_selector);
+
         mLoadingImg = (ImageView) getActivity().findViewById(R.id.horoscope_loading);
         mLoadingFab = (FloatingActionButton) getActivity().findViewById(R.id.horoscope_loading_fab);
         mReloadBtn = (Button) getActivity().findViewById(R.id.horoscope_reload);
@@ -287,12 +310,12 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
             mCoverFlow.setSelection(getHoroscopeInfoIndex(mHoroscopeName));
         }
 
-        mCard.setVisibility(View.GONE);
-        mLoadingImg.setVisibility(View.GONE);
-        mLoadingFab.setVisibility(View.GONE);
-        mReloadBtn.setVisibility(View.GONE);
-        mName.setVisibility(View.GONE);
-        mCoverFlow.setVisibility(View.GONE);
+        mCard.setVisibility(View.INVISIBLE);
+        mLoadingImg.setVisibility(View.INVISIBLE);
+        mLoadingFab.setVisibility(View.INVISIBLE);
+        mReloadBtn.setVisibility(View.INVISIBLE);
+        mName.setVisibility(View.INVISIBLE);
+        mCoverFlow.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -316,7 +339,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
                 Message msg = new Message();
                 msg.what = MSG_ID_CHANGE_HOROSCOPE;
                 msg.obj = mHoroscopeList.get(position);
-                mHandler.sendMessageDelayed(msg, 2000);
+                mHandler.sendMessageDelayed(msg, 1500);
             }
         }
     }
