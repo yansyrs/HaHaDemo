@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
             // 冷笑话
             replaceContentFragment(new JokeFragment());
             setTitle(getString(R.string.jokes));
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_horoscope) {
             // 星座
             replaceContentFragment(new HoroscopeFragment());
             setTitle(getString(R.string.horoscope));

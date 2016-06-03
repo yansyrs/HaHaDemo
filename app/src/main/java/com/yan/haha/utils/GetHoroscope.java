@@ -35,7 +35,7 @@ public class GetHoroscope extends AsyncTask<Void, Void, Void> {
     public JSONObject myObject = null;
     public static String TAG = "GetHoroscope";
     private Horoscope horoscopeObject;
-    public static List<Horoscope> horoscopeArray = new ArrayList<Horoscope>();
+    public List<Horoscope> horoscopeArray = new ArrayList<Horoscope>();
     OnDataFinishedListener onDataFinishedListener;
     private String type;
     private String consName;

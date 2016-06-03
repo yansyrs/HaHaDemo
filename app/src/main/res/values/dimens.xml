@@ -11,14 +11,23 @@
     <dimen name="brain_riddle_answer_icon">32dp</dimen>
     <dimen name="brain_riddle_save_icon">24dp</dimen>
 
-    <dimen name="horoscope_card_height">300dp</dimen>
-    <dimen name="horoscope_card_img_height">200dp</dimen>
-    <dimen name="horoscope_card_avatar_size">150dp</dimen>
+    <dimen name="fab_half_size">28dp</dimen>
+    <dimen name="fab_half_size_margin_top">-28dp</dimen>
+
+    <dimen name="horoscope_card_img_height">196dp</dimen>
+    <dimen name="horoscope_card_avatar_size">146dp</dimen>
     <!-- (horoscope_card_img_height - horoscope_card_avatar_size) / 2 - title gap -->
     <dimen name="horoscope_card_avatar_margin_top">15dp</dimen>
     <dimen name="horoscope_card_title_size">25sp</dimen>
     <!-- horoscope_card_img_height - horoscope_card_title_size - title gap -->
-    <dimen name="horoscope_card_title_margin_top">165dp</dimen>
+    <dimen name="horoscope_card_title_margin_top">161dp</dimen>
     <dimen name="horoscope_card_title_margin_left">10dp</dimen>
     <dimen name="horoscope_cover_flow_height">100dp</dimen>
+
+    <dimen name="horoscope_details_header_height">170dp</dimen>
+    <dimen name="horoscope_details_avatar_height">110dp</dimen>
+    <dimen name="horoscope_details_avatar_margin_top">30dp</dimen>
+    <dimen name="horoscope_details_title_size">25sp</dimen>
+    <dimen name="horoscope_details_title_margin_top">135dp</dimen>
+    <dimen name="horoscope_details_title_margin_left">10dp</dimen>
 </resources>
