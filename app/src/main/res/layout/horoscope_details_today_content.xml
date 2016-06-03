@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/table_row_element"
+                android:textColor="@color/black"
+                android:text="综合"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:textColor="@color/black"
+                android:text="工作"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:textColor="@color/black"
+                android:text="爱情"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:textColor="@color/black"
+                android:text="健康"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:textColor="@color/black"
+                android:text="金钱"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/table_row_element"
+                android:text="60%"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:text="60%"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:text="60%"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:text="81%"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:text="40%"/>
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/table_row_element"
+                android:textColor="@color/black"
+                android:text="幸运颜色"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:textColor="@color/black"
+                android:text="幸运数字"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:textColor="@color/black"
+                android:text="速配星座"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/table_row_element"
+                android:text="红色"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:text="2"/>
+
+            <TextView
+                style="@style/table_row_element"
+                android:text="狮子座"/>
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
+        android:paddingRight="20dp"
+        android:paddingEnd="20dp"
+        android:text="今天是你沟通效率高涨的一天，利用你高效运作的大脑，不仅能促成很多人际关系，合作，也能让学业工作开展得更加顺利，在彼此交流意见的过程中，产生更多共识，有利合同的签订。但是事业的高压也容易让你产生逃避心态，挫败感让你缺乏闯一闯的勇气。" />
+</LinearLayout>

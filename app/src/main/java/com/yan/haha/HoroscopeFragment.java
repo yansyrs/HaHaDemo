@@ -1,11 +1,13 @@
 package com.yan.haha;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,7 +28,10 @@ import com.yan.haha.utils.GetHoroscope;
 import com.yan.haha.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class HoroscopeFragment extends ContentFragment implements OnDataFinishedListener,
         CoverFlowView.CoverFlowListener<HoroscopeCoverFlowAdapter> {
@@ -40,6 +45,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     private TextView mSummary = null;
     private Button mShareBtn = null;
     private Button mMoreBtn = null;
+    private TextView mDate = null;
     private ImageView mLoadingImg = null;
     private FloatingActionButton mLoadingFab = null;
     private Button mReloadBtn = null;
@@ -146,7 +152,6 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         }
 
         // 判断是否有滚动条，如果没滚动条则将 mCoverFlow 靠底显示
-        Log.i("yan", "can scroll: " + Utils.canScroll(mScrollView));
         if (!Utils.canScroll(mScrollView) && !Utils.isScreenLandscape()) {
             //RelativeLayout rl = new RelativeLayout(getActivity());
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -274,6 +279,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         mSummary = (TextView) getActivity().findViewById(R.id.horoscope_summary);
         mShareBtn = (Button) getActivity().findViewById(R.id.horoscope_share);
         mMoreBtn = (Button) getActivity().findViewById(R.id.horoscope_more);
+        mDate = (TextView) getActivity().findViewById(R.id.horoscope_date);
 
         mScrollView = (ScrollView) getActivity().findViewById(R.id.horoscope_scrollview);
         mScrollSelector = (ViewGroup) getActivity().findViewById(R.id.horoscope_selector);
@@ -296,6 +302,10 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
             }
         });
 
+        mDate.setEnabled(false);
+        Date date = new Date(System.currentTimeMillis());
+        mDate.setText(DateFormat.getLongDateFormat(getActivity()).format(date));
+
         mReloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -309,6 +319,15 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         if (getHoroscopeInfoIndex(mHoroscopeName) >= 0) {
             mCoverFlow.setSelection(getHoroscopeInfoIndex(mHoroscopeName));
         }
+
+        mMoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), HoroscopeDetailsActivity.class);
+                intent.putExtra("name", mHoroscopeName);
+                startActivity(intent);
+            }
+        });
 
         mCard.setVisibility(View.INVISIBLE);
         mLoadingImg.setVisibility(View.INVISIBLE);
