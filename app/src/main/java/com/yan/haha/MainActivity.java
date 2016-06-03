@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -91,12 +92,15 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_brain_riddles) {
             // 脑筋急转弯
             replaceContentFragment(new BrainRiddleFragment());
+            setTitle(getString(R.string.brain_riddles));
         } else if (id == R.id.nav_jokes) {
             // 冷笑话
             replaceContentFragment(new JokeFragment());
+            setTitle(getString(R.string.jokes));
         } else if (id == R.id.nav_slideshow) {
             // 星座
             replaceContentFragment(new HoroscopeFragment());
+            setTitle(getString(R.string.horoscope));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
