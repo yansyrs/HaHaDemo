@@ -21,7 +21,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/horoscope_details_header_height"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/horoscope_bg_1" />
+                    android:src="@drawable/horoscope_bg_2" />
 
                 <ImageView
                     android:id="@+id/horoscope_details_avatar"
@@ -47,6 +47,45 @@
                     android:textSize="@dimen/horoscope_details_title_size" />
             </FrameLayout>
 
+            <LinearLayout
+                android:layout_below="@id/horoscope_details_header"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.andexert.expandablelayout.library.ExpandableLayout
+                    android:id="@+id/horoscope_details_today"
+                    xmlns:expandable="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    expandable:el_headerLayout="@layout/horoscope_details_today_header"
+                    expandable:el_contentLayout="@layout/horoscope_details_today_content"/>
+
+                <com.andexert.expandablelayout.library.ExpandableLayout
+                    android:id="@+id/horoscope_details_week"
+                    xmlns:expandable="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    expandable:el_headerLayout="@layout/horoscope_details_week_header"
+                    expandable:el_contentLayout="@layout/horoscope_details_week_content"/>
+
+                <com.andexert.expandablelayout.library.ExpandableLayout
+                    android:id="@+id/horoscope_details_month"
+                    xmlns:expandable="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    expandable:el_headerLayout="@layout/horoscope_details_month_header"
+                    expandable:el_contentLayout="@layout/horoscope_details_month_content"/>
+
+                <com.andexert.expandablelayout.library.ExpandableLayout
+                    android:id="@+id/horoscope_details_year"
+                    xmlns:expandable="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    expandable:el_headerLayout="@layout/horoscope_details_year_header"
+                    expandable:el_contentLayout="@layout/horoscope_details_year_content"/>
+            </LinearLayout>
+
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/horoscope_loading_fab"
                 android:layout_width="wrap_content"
@@ -58,142 +97,6 @@
                 android:layout_marginRight="@dimen/fab_margin"
                 android:layout_marginTop="@dimen/fab_half_size_margin_top"
                 android:src="@drawable/ic_save" />
-
-            <LinearLayout
-                android:layout_below="@id/horoscope_details_header"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!--
-                <TextView
-                    style="@style/details_label"
-                    android:text="今天"/>
-
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            style="@style/table_row_element"
-                            android:textColor="@color/black"
-                            android:text="综合"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:textColor="@color/black"
-                            android:text="工作"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:textColor="@color/black"
-                            android:text="爱情"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:textColor="@color/black"
-                            android:text="健康"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:textColor="@color/black"
-                            android:text="金钱"/>
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            style="@style/table_row_element"
-                            android:text="60%"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:text="60%"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:text="60%"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:text="81%"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:text="40%"/>
-                    </TableRow>
-                </TableLayout>
-
-                <TableLayout
-                    android:layout_marginTop="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            style="@style/table_row_element"
-                            android:textColor="@color/black"
-                            android:text="幸运颜色"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:textColor="@color/black"
-                            android:text="幸运数字"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:textColor="@color/black"
-                            android:text="速配星座"/>
-
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            style="@style/table_row_element"
-                            android:text="红色"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:text="2"/>
-
-                        <TextView
-                            style="@style/table_row_element"
-                            android:text="狮子座"/>
-                    </TableRow>
-                </TableLayout>
-
-                <TextView
-                    android:layout_marginTop="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:paddingStart="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingEnd="20dp"
-                    android:text="今天是你沟通效率高涨的一天，利用你高效运作的大脑，不仅能促成很多人际关系，合作，也能让学业工作开展得更加顺利，在彼此交流意见的过程中，产生更多共识，有利合同的签订。但是事业的高压也容易让你产生逃避心态，挫败感让你缺乏闯一闯的勇气。" />
-                -->
-
-                <com.andexert.expandablelayout.library.ExpandableLayout
-                    android:id="@+id/expandableLayout"
-                    xmlns:expandable="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    expandable:el_headerLayout="@layout/horoscope_details_today_header"
-                    expandable:el_contentLayout="@layout/horoscope_details_today_content"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="JustTest"/>
-            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

@@ -23,10 +23,13 @@
  ***********************************************************************************/
 package com.andexert.expandablelayout.library;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -42,7 +45,7 @@ public class ExpandableLayout extends RelativeLayout
     private Integer duration;
     private RelativeLayout contentLayout;
     private RelativeLayout headerLayout;
-    private Animation animation;
+    private ValueAnimator animation;
 
     public ExpandableLayout(Context context)
     {
@@ -119,11 +122,13 @@ public class ExpandableLayout extends RelativeLayout
         v.getLayoutParams().height = 0;
         v.setVisibility(VISIBLE);
 
+        /*
         animation = new Animation()
         {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t)
             {
+                Log.i("yan", "height: " + targetHeight * interpolatedTime);
                 if (interpolatedTime == 1)
                     isOpened = true;
                 v.getLayoutParams().height = (interpolatedTime == 1) ? LayoutParams.WRAP_CONTENT : (int) (targetHeight * interpolatedTime);
@@ -138,11 +143,26 @@ public class ExpandableLayout extends RelativeLayout
         };
         animation.setDuration(duration);
         v.startAnimation(animation);
+        */
+        animation = ValueAnimator.ofInt(0, targetHeight);
+        animation.setDuration(duration);
+        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int currHeight = (int) animation.getAnimatedValue();
+                if (currHeight == targetHeight)
+                    isOpened = true;
+                v.getLayoutParams().height = isOpened ? LayoutParams.WRAP_CONTENT : currHeight;
+                v.requestLayout();
+            }
+        });
+        animation.start();
     }
 
     private void collapse(final View v)
     {
         final int initialHeight = v.getMeasuredHeight();
+        /*
         animation = new Animation()
         {
             @Override
@@ -166,6 +186,23 @@ public class ExpandableLayout extends RelativeLayout
 
         animation.setDuration(duration);
         v.startAnimation(animation);
+        */
+        animation = ValueAnimator.ofInt(initialHeight, 0);
+        animation.setDuration(duration);
+        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int currHeight = (int) animation.getAnimatedValue();
+                if (currHeight == 0) {
+                    v.setVisibility(View.GONE);
+                    isOpened = false;
+                } else {
+                    v.getLayoutParams().height = currHeight;
+                    v.requestLayout();
+                }
+            }
+        });
+        animation.start();
     }
 
     public Boolean isOpened()
@@ -217,8 +254,7 @@ public class ExpandableLayout extends RelativeLayout
         }
     }
 
-    @Override
-    public void setLayoutAnimationListener(Animation.AnimationListener animationListener) {
-        animation.setAnimationListener(animationListener);
+    public void setAnimationListener(Animator.AnimatorListener animationListener) {
+        animation.addListener(animationListener);
     }
 }

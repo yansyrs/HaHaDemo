@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/horoscope_details_item_content_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/details_label"
+        android:text="综合" />
+
+    <TextView
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="上旬，太阳和金星都在家庭宫运作，很明显，你处在熟悉的环境中，受到家人或前辈的呵护，安全、舒适，而你并不以为然，甚至不思进取。很快，转折点会在月中到来，水星入家庭宫，预示着你的个人安全感受到冲击，变动来了。太阳和金星下旬相继离开家庭宫，转入玩乐宫，你被抛入一个全新的、变化很快的环境，世界一下子变得很大，自己突然变得很渺小，很没有安全感，但是你的潜力会被激发。小提醒，很多时候，我们都是被迫长大的。" />
+
+    <TextView
+        style="@style/details_label"
+        android:text="健康" />
+
+    <TextView
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="上旬和中旬，喜欢待在家中，身心都安宁，但家人的健康会需要你更多关注。下旬，玩乐多，作息往往被打乱，心脏容易感觉到不适。另外，本月容易有运动伤害，注意自我保护。" />
+
+    <TextView
+        style="@style/details_label"
+        android:text="恋爱" />
+
+    <TextView
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="上旬和中旬，甘于和恋人享受平淡的日常，是适婚的季节，单身汪要有被催婚被相亲的心理准备。下旬，桃花会走旺，单身汪的春天来了，对于有伴的双鱼则容易惹上烂桃花。" />
+
+    <TextView
+        style="@style/details_label"
+        android:text="金钱" />
+
+    <TextView
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="上旬和中旬，财运和家人的财务状况紧密联系，有购置或处理物业的时机，投资理财只信任哪些曾经给你带来过收益的固定渠道，不会冒险。下旬，赌运走高，虽然不安，但还是忍不住诱惑要去博一搏。" />
+
+    <TextView
+        style="@style/details_label"
+        android:text="工作" />
+
+    <TextView
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="上旬和中旬，都是按部就班，中旬的职场潜伏人事变动时机。下旬，职场有转换环境的机会，如跳槽、调岗，创造力出色，从事娱乐或创意的双鱼要抓紧机会好好表现。" />
+
+</LinearLayout>

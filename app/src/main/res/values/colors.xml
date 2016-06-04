@@ -11,4 +11,9 @@
 
     <color name="brain_riddle_list_bg">#E9E9E9</color>
     <color name="brain_riddle_list_item_expanded">#384248</color>
+
+    <color name="horoscope_details_item_header_bg">#E0E0E0</color>
+    <color name="horoscope_details_item_content_bg">#FFFFFF</color>
+    <color name="horoscope_details_item_header_bg_2">#D8D8D8</color>
+    <color name="horoscope_details_item_content_bg_2">#FFFFFF</color>
 </resources>
