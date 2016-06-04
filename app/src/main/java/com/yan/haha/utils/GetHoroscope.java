@@ -33,7 +33,7 @@ public class GetHoroscope extends AsyncTask<Void, Void, Void> {
             "Chrome/29.0.1547.66 Safari/537.36";
     public static final String APPKEY = "4daea466b6a8bed984cad42c4e468cd8";
     public JSONObject myObject = null;
-    public static String TAG = "leungadd";
+    public static String TAG = "GetHoroscope";
     private Horoscope horoscopeObject;
     public List<Horoscope> horoscopeArray = new ArrayList<Horoscope>();
     OnDataFinishedListener onDataFinishedListener;

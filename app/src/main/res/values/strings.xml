@@ -16,5 +16,7 @@
     <string name="jokes">Jokes</string>
     <string name="horoscope">Horoscope</string>
     <string name="publish_time">Publish Time:</string>
-
+    <string name="favorite_capital">FAVORITE</string>
+    <string name="unfavorite_capital">UNFAVORITE</string>
+    <string name="share_capital">SHARE</string>
 </resources>

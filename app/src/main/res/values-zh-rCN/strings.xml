@@ -15,4 +15,6 @@
     <string name="jokes">十万冷笑话</string>
     <string name="horoscope">星座魔法屋</string>
     <string name="publish_time">发表时间:</string>
+    <string name="favorite_capital">收藏</string>
+    <string name="unfavorite_capital">取消收藏</string>
 </resources>

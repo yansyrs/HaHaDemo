@@ -1,11 +1,15 @@
 package com.yan.haha.adapter;
 
 import android.animation.Animator;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.yan.haha.R;
@@ -46,6 +51,10 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     private int positionX;
     private int positionY;
     private Context mContext;
+    private SQLiteDatabase db;
+    private static final String DB_NAME = "jokes.db";
+    public static final String TABLE_NAME = "Jokes";
+    private static final String CRLF_REPLACE = ".crlf0.0";
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -273,6 +282,8 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         View unexpandView = container.findViewById(R.id.joke_unexpanded);
         View sep = container.findViewById(R.id.joke_sep);
         Button share = (Button) container.findViewById(R.id.joke_share);
+        final Button joke_favorite = (Button) container.findViewById(R.id.joke_favorite);
+
         if (mJokeData.get(position) == null) {
             unexpandView.setVisibility(View.GONE);
             expandView.setVisibility(View.GONE);
@@ -295,12 +306,60 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("leungadd", "onclick");
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, mJokeData.get(position).getBody());
                     sendIntent.setType("text/plain");
                     mContext.startActivity(sendIntent);
+                }
+            });
+
+            db = mContext.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
+            Cursor tmpCursor = db.rawQuery("SELECT * FROM "+ TABLE_NAME +" WHERE title=?",
+                    new String[]{mJokeData.get(position).getTitle().replaceAll("\\r\\n",CRLF_REPLACE)});
+            if(tmpCursor.getCount() == 0) {
+                joke_favorite.setText(mContext.getText(R.string.favorite_capital));
+                joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+            }else {
+                joke_favorite.setText(mContext.getText(R.string.unfavorite_capital));
+                joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            }
+            joke_favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String mTitle = mJokeData.get(position).getTitle().replaceAll("\\r\\n", CRLF_REPLACE);
+                    String mPubDate = mJokeData.get(position).getPubDate();
+                    String mBody = mJokeData.get(position).getBody().replaceAll("\\r\\n", CRLF_REPLACE);
+                    ContentValues cv = new ContentValues();
+                    cv.put("title", mTitle);
+                    cv.put("pubDate", mPubDate);
+                    cv.put("body", mBody);
+
+                    String sql = "create table if not exists " + TABLE_NAME + " (_id integer primary key," +
+                            " title text, pubDate text, body text)";
+                    db = mContext.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
+                    db.execSQL(sql);
+                    if(joke_favorite.getText().equals(mContext.getText(R.string.favorite_capital))) {
+                        db.insert(TABLE_NAME, null, cv);
+                        joke_favorite.setText(mContext.getText(R.string.unfavorite_capital));
+                        joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                    }else {
+                        db.delete(TABLE_NAME, "title=?", new String[]{mTitle});
+                        joke_favorite.setText(mContext.getText(R.string.favorite_capital));
+                        joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+                    }
+
+                    //查询
+                    Cursor c = db.rawQuery("SELECT * FROM "+ TABLE_NAME +" WHERE title IS NOT NULL", null);
+                    while (c.moveToNext()) {
+                        int _id = c.getInt(c.getColumnIndex("_id"));
+                        String title = c.getString(c.getColumnIndex("title"));
+                        Log.d("leungadd", "_id=>" + _id + ", title=>" + title);
+                    }
+                    c.close();
+                    //查询end
+                    db.close();
+                    Log.d("leungadd", "db... success");
                 }
             });
         }
