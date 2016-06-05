@@ -17,4 +17,9 @@
     <string name="publish_time">发表时间:</string>
     <string name="favorite_capital">收藏</string>
     <string name="unfavorite_capital">取消收藏</string>
+    <string name="health">健康</string>
+    <string name="love">爱情</string>
+    <string name="money">金钱</string>
+    <string name="overall">综合</string>
+    <string name="work">工作</string>
 </resources>

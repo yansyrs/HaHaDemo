@@ -19,4 +19,10 @@
     <string name="favorite_capital">FAVORITE</string>
     <string name="unfavorite_capital">UNFAVORITE</string>
     <string name="share_capital">SHARE</string>
+
+    <string name="overall">Overall</string>
+    <string name="work">Work</string>
+    <string name="love">Love</string>
+    <string name="health">Health</string>
+    <string name="money">Money</string>
 </resources>

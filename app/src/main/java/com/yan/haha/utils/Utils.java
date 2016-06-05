@@ -2,6 +2,8 @@ package com.yan.haha.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ScrollView;
@@ -67,4 +69,20 @@ public class Utils {
             return false;
         }
     }
+
+    public static abstract class BitmapColorCallback {
+        public void onGenerated(Palette palette) {}
+    }
+
+    public static void getBitmapColor(Bitmap bmp, final BitmapColorCallback callback) {
+        Palette.from(bmp).generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                if (callback != null) {
+                    callback.onGenerated(palette);
+                }
+            }
+        });
+    }
+
 }

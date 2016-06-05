@@ -48,10 +48,11 @@
             </FrameLayout>
 
             <LinearLayout
+                android:id="@+id/horoscope_details_content"
                 android:layout_below="@id/horoscope_details_header"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <com.andexert.expandablelayout.library.ExpandableLayout
                     android:id="@+id/horoscope_details_today"
@@ -84,6 +85,7 @@
                     android:layout_height="wrap_content"
                     expandable:el_headerLayout="@layout/horoscope_details_year_header"
                     expandable:el_contentLayout="@layout/horoscope_details_year_content"/>
+
             </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton
@@ -99,4 +101,26 @@
                 android:src="@drawable/ic_save" />
         </RelativeLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/horoscope_details_load_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/horoscope_details_header_height">
+        <ImageView
+            android:id="@+id/horoscope_details_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:tint="@color/colorAccent"
+            android:src="@android:drawable/stat_notify_sync" />
+
+        <Button
+            android:id="@+id/horoscope_details_reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_centerInParent="true"
+            android:text="@string/reload"/>
+    </RelativeLayout>
 </RelativeLayout>
