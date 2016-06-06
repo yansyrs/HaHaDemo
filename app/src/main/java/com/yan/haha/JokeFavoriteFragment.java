@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,59 +41,45 @@ public class JokeFavoriteFragment extends ContentFragment{
     public static final String TABLE_NAME = "Jokes";
     private static final String CRLF_REPLACE = ".crlf0.0";
     private static final String TAG = "JokeFavoriteFragment";
+    private ActionBarDrawerToggle toggle;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+
+        toggle = MainActivity.getInstance().toggle;
+        toggle.setDrawerIndicatorEnabled(false);
+        toggle.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white);
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.getInstance().onBackPressed();
+                toggle.setDrawerIndicatorEnabled(true);
+            }
+        });
         return inflater.inflate(R.layout.joke_favorite, container, false);
-
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.joke_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.joke_favorite_action) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         initViews();
-        if (jokesArray.size() == 0) {
-            mJokeList.setHasFixedSize(true);
-            LinearLayoutManager lm = new LinearLayoutManager(getActivity());
-            lm.setOrientation(LinearLayoutManager.VERTICAL);
-            mJokeList.setLayoutManager(lm);
-            mJokeList.setAdapter(mAdapter);
-
-            getJokeFromDb();
-        }
+        mJokeList.setHasFixedSize(true);
+        LinearLayoutManager lm = new LinearLayoutManager(getActivity());
+        lm.setOrientation(LinearLayoutManager.VERTICAL);
+        mJokeList.setLayoutManager(lm);
+        mJokeList.setAdapter(mAdapter);
+        getJokeFromDb();
     }
 
     private void getJokeFromDb() {
         db = MainActivity.getInstance().openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
         //查询数据库
-        Cursor c = db.rawQuery("SELECT * FROM "+ TABLE_NAME +" WHERE title IS NOT NULL", null);
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title IS NOT NULL", null);
         while (c.moveToNext()) {
             int _id = c.getInt(c.getColumnIndex("_id"));
-            String title = c.getString(c.getColumnIndex("title")).replaceAll(CRLF_REPLACE,"\r\n");
+            String title = c.getString(c.getColumnIndex("title")).replaceAll(CRLF_REPLACE, "\r\n");
             String pubDate = c.getString(c.getColumnIndex("pubDate"));
             String body = c.getString(c.getColumnIndex("body")).replaceAll(CRLF_REPLACE, "\r\n");
             jokesObject = new Jokes(title, pubDate, body);
@@ -97,10 +87,11 @@ public class JokeFavoriteFragment extends ContentFragment{
             Log.d(TAG, "_id=>" + _id + ", title=>" + title);
         }
         c.close();
-        mAdapter.setJokeList((ArrayList<Jokes>)jokesArray);
+        mAdapter.setJokeList((ArrayList<Jokes>) jokesArray);
 
         //查询end
     }
+
     private void initViews() {
         mJokeList = (RecyclerView) getActivity().findViewById(R.id.joke_favorite_list);
     }

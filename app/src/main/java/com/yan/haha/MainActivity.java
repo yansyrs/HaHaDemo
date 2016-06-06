@@ -1,6 +1,7 @@
 package com.yan.haha;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
@@ -16,6 +17,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Fragment mContentFragment = null;
     private static MainActivity instance;
+    public DrawerLayout drawer;
+    public ActionBarDrawerToggle toggle;
+    public NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +40,13 @@ public class MainActivity extends AppCompatActivity
         });
         */
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -55,6 +59,8 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }else if (getFragmentManager().getBackStackEntryCount() > 0 ) {
+            getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -91,15 +97,15 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_brain_riddles) {
             // 脑筋急转弯
-            replaceContentFragment(new BrainRiddleFragment());
+            replaceContentFragment(new BrainRiddleFragment(),false);
             setTitle(getString(R.string.brain_riddles));
         } else if (id == R.id.nav_jokes) {
             // 冷笑话
-            replaceContentFragment(new JokeFragment());
+            replaceContentFragment(new JokeFragment(),false);
             setTitle(getString(R.string.jokes));
         } else if (id == R.id.nav_horoscope) {
             // 星座
-            replaceContentFragment(new HoroscopeFragment());
+            replaceContentFragment(new HoroscopeFragment(),false);
             setTitle(getString(R.string.horoscope));
         } else if (id == R.id.nav_manage) {
 
@@ -114,8 +120,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void replaceContentFragment(Fragment fragment) {
+    public void replaceContentFragment(Fragment fragment, boolean addToBackStack) {
         mContentFragment = fragment;
-        getFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content, fragment);
+        if(addToBackStack) {
+            transaction.addToBackStack("fragment");
+        }
+        transaction.commit();
     }
 }
