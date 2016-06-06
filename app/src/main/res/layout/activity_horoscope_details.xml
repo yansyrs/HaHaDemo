@@ -4,10 +4,12 @@
     android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/horoscope_details_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/horoscope_details_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -89,7 +91,7 @@
             </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/horoscope_loading_fab"
+                android:id="@+id/horoscope_details_save_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

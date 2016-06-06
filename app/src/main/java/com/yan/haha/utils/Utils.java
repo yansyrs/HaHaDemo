@@ -3,13 +3,16 @@ package com.yan.haha.utils;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 
 import com.yan.haha.MainApplication;
 
+import java.io.FileOutputStream;
 import java.util.Random;
 
 public class Utils {
@@ -85,4 +88,27 @@ public class Utils {
         });
     }
 
+    /**
+     * 将 View 的显示转成 Bitmap
+     */
+    public static Bitmap convertViewToBitmap(View view) {
+        Bitmap b = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        view.draw(c);
+        return b;
+    }
+
+    public static void saveViewAsPicture(View view, String path) {
+        Bitmap bitmap = convertViewToBitmap(view);
+        if (bitmap != null) {
+            try {
+                FileOutputStream fos = new FileOutputStream(path);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            } catch (Exception e) {
+                Log.i("yan", "saveViewAsPicture error: " + e.getMessage());
+            }
+        } else {
+            Log.i("yan", "saveViewAsPicture error: bitmap null");
+        }
+    }
 }

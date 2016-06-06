@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/year_info"
         style="@style/details_label"
         android:text="稳定发展的成长之年" />
 
@@ -15,6 +16,7 @@
         android:text="综合" />
 
     <TextView
+        android:id="@+id/year_overall"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,6 +27,7 @@
         android:text="事业" />
 
     <TextView
+        android:id="@+id/year_work"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,6 +38,7 @@
         android:text="爱情" />
 
     <TextView
+        android:id="@+id/year_love"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,6 +49,7 @@
         android:text="健康" />
 
     <TextView
+        android:id="@+id/year_health"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,6 +60,7 @@
         android:text="金钱" />
 
     <TextView
+        android:id="@+id/year_money"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,6 +71,7 @@
         android:text="幸运石" />
 
     <TextView
+        android:id="@+id/year_lucky_stone"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

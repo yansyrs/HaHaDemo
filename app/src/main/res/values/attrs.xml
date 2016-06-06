@@ -28,5 +28,7 @@
         <attr name="el_headerLayout" format="reference"/>
         <attr name="el_contentLayout" format="reference" />
         <attr name="el_duration" format="integer" />
+        <attr name="el_icon_collapse" format="reference" />
+        <attr name="el_icon_expand" format="reference" />
     </declare-styleable>
 </resources>
