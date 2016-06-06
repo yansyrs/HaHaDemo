@@ -45,12 +45,12 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     private LoadingState mLoadState = LoadingState.IDLE;
     private boolean mIsFabShown = true;
     private SQLiteDatabase db;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.joke_fragment, container, false);
-
     }
 
     @Override
@@ -68,7 +68,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.joke_favorite_action) {
-            MainActivity.getInstance().replaceContentFragment(new JokeFavoriteFragment());
+            MainActivity.getInstance().replaceContentFragment(new JokeFavoriteFragment(),true);
             return true;
         }
 
@@ -79,16 +79,26 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     public void onStart() {
         super.onStart();
         initViews();
+        mJokeList.setHasFixedSize(true);
+        LinearLayoutManager lm = new LinearLayoutManager(getActivity());
+        lm.setOrientation(LinearLayoutManager.VERTICAL);
+        mJokeList.setLayoutManager(lm);
+        mJokeList.setAdapter(mAdapter);
         if (mJokeData.size() == 0) {
-            mJokeList.setHasFixedSize(true);
-
-            LinearLayoutManager lm = new LinearLayoutManager(getActivity());
-            lm.setOrientation(LinearLayoutManager.VERTICAL);
-            mJokeList.setLayoutManager(lm);
-            mJokeList.setAdapter(mAdapter);
-
             doGetJokes();
+        }else {
+            mContentLoadingImg.setVisibility(View.GONE);
+            mFab.setScaleX(0f);
+            mFab.setScaleY(0f);
+            mFab.setVisibility(View.VISIBLE);
+            mFab.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setInterpolator(new DecelerateInterpolator(3.0f))
+                    .setDuration(1000)
+                    .start();
         }
+        mAdapter.refresh();
     }
 
     private void doGetJokeAnimate() {
@@ -106,7 +116,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
                             // 网络仍在请求中
                             doGetJokeAnimate();
                             return;
-                        } else if (mLoadState != LoadingState.IDLE){
+                        } else if (mLoadState != LoadingState.IDLE) {
                             // 网络请求成功，加载数据到列表
                             if (mLoadState == LoadingState.LOAD_SUCCESS) {
                                 mAdapter.setJokeList(mJokeData);
@@ -139,9 +149,14 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
                         }
                     }
 
-                    public void onAnimationStart(Animator animation) {}
-                    public void onAnimationCancel(Animator animation) {}
-                    public void onAnimationRepeat(Animator animation) {}
+                    public void onAnimationStart(Animator animation) {
+                    }
+
+                    public void onAnimationCancel(Animator animation) {
+                    }
+
+                    public void onAnimationRepeat(Animator animation) {
+                    }
                 });
         ani.start();
     }
@@ -191,7 +206,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
         mJokeList = (RecyclerView) getActivity().findViewById(R.id.joke_list);
 
         mFab = (FloatingActionButton) getActivity()
-                                        .findViewById(R.id.joke_fab);
+                .findViewById(R.id.joke_fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,7 +214,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
                 doGetJokes();
             }
         });
-        mFab.setVisibility(View.INVISIBLE);
+       mFab.setVisibility(View.INVISIBLE);
         mContentLoadingImg = (ImageView) getActivity().findViewById(R.id.joke_loading);
 
         mJokeList.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -315,14 +315,17 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             });
 
             db = mContext.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
-            Cursor tmpCursor = db.rawQuery("SELECT * FROM "+ TABLE_NAME +" WHERE title=?",
-                    new String[]{mJokeData.get(position).getTitle().replaceAll("\\r\\n",CRLF_REPLACE)});
-            if(tmpCursor.getCount() == 0) {
-                joke_favorite.setText(mContext.getText(R.string.favorite_capital));
-                joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
-            }else {
-                joke_favorite.setText(mContext.getText(R.string.unfavorite_capital));
-                joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            Cursor tmpCursor = db.rawQuery("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='"+TABLE_NAME+"'", null);
+            if(tmpCursor.moveToNext() && tmpCursor.getInt(0) > 0) {
+                tmpCursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title=?",
+                        new String[]{mJokeData.get(position).getTitle().replaceAll("\\r\\n", CRLF_REPLACE)});
+                if (tmpCursor.getCount() == 0) {
+                    joke_favorite.setText(mContext.getText(R.string.favorite_capital));
+                    joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+                } else {
+                    joke_favorite.setText(mContext.getText(R.string.unfavorite_capital));
+                    joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                }
             }
             joke_favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
