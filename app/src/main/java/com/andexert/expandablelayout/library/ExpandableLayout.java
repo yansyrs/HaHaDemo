@@ -47,6 +47,8 @@ public class ExpandableLayout extends RelativeLayout
     private RelativeLayout headerLayout;
     private ValueAnimator animation;
 
+    private ToggleListener mToggleListener = null;
+
     public ExpandableLayout(Context context)
     {
         super(context);
@@ -157,6 +159,10 @@ public class ExpandableLayout extends RelativeLayout
             }
         });
         animation.start();
+
+        if (mToggleListener != null) {
+            mToggleListener.onExpandableLayoutShow(this);
+        }
     }
 
     private void collapse(final View v)
@@ -203,6 +209,10 @@ public class ExpandableLayout extends RelativeLayout
             }
         });
         animation.start();
+
+        if (mToggleListener != null) {
+            mToggleListener.onExpandableLayoutHide(this);
+        }
     }
 
     public Boolean isOpened()
@@ -256,5 +266,14 @@ public class ExpandableLayout extends RelativeLayout
 
     public void setAnimationListener(Animator.AnimatorListener animationListener) {
         animation.addListener(animationListener);
+    }
+
+    public static interface ToggleListener {
+        public void onExpandableLayoutShow(ViewGroup parent);
+        public void onExpandableLayoutHide(ViewGroup parent);
+    }
+
+    public void setOnToggleListener(ToggleListener listener) {
+        mToggleListener = listener;
     }
 }

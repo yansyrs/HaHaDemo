@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/week_author"
         android:padding="10dp"
         android:textColor="@color/black"
         android:layout_width="wrap_content"
@@ -14,30 +15,35 @@
         android:text="作者：马子晴" />
 
     <TextView
+        android:id="@+id/week_health"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="健康：家人的健康需要你多加关注。容易有运动伤害。 " />
 
     <TextView
+        android:id="@+id/week_job"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="求职：不计结果，抱着学习心态去就好。" />
 
     <TextView
+        android:id="@+id/week_love"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="恋情：感情稳定，彼此包容，是适合结婚的季节。单身汪要有被催婚、被相亲的心理准备。" />
 
     <TextView
+        android:id="@+id/week_money"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="财运：和家人的财务状况紧密联系。有购置或处理物业的时机。" />
 
     <TextView
+        android:id="@+id/week_work"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

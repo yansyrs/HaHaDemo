@@ -3,13 +3,17 @@ package com.yan.haha.utils;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.os.AsyncTask;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 
 import com.yan.haha.MainApplication;
 
+import java.io.FileOutputStream;
 import java.util.Random;
 
 public class Utils {
@@ -85,4 +89,68 @@ public class Utils {
         });
     }
 
+    /**
+     * 将 View 的显示转成 Bitmap
+     */
+    public static Bitmap convertViewToBitmap(View view) {
+        Bitmap b = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        view.draw(c);
+        return b;
+    }
+
+    /**
+     * 将 view 转成图片并保存下来
+     * @param view 要保存为图片的控件
+     * @param path 保存路径
+     * @return boolean 是否保存成功
+     */
+    public static boolean saveViewAsPicture(View view, String path) {
+        Bitmap bitmap = convertViewToBitmap(view);
+        if (bitmap != null) {
+            try {
+                FileOutputStream fos = new FileOutputStream(path);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                return true;
+            } catch (Exception e) {
+                Log.i("yan", "saveViewAsPicture error: " + e.getMessage());
+            }
+        } else {
+            Log.i("yan", "saveViewAsPicture error: bitmap null");
+        }
+        return false;
+    }
+
+    /**
+     * 异步将 view 转成图片并保存下来
+     * @param view 要保存为图片的控件
+     * @param path 保存路径
+     * @param success 保存成功回调函数
+     * @param fail 保存失败回调函数
+     */
+    public static void saveViewAsPicture(final View view, final String path,
+                                         final Runnable success, final Runnable fail) {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                if (saveViewAsPicture(view, path)) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            protected void onPostExecute(Object obj) {
+                boolean ret = (boolean) obj;
+                if (ret) {
+                    if (success != null) {
+                        success.run();
+                    }
+                } else if (fail != null) {
+                    fail.run();
+                }
+            }
+        };
+        task.execute();
+    }
 }

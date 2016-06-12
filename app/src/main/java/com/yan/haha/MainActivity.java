@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public static MainActivity getInstance(){
+    public static MainActivity getInstance() {
         return instance;
     }
 
