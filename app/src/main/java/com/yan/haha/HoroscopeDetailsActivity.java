@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -81,6 +83,10 @@ public class HoroscopeDetailsActivity extends Activity
 
     private static int PERMISSION_REQ_CODE = 0;
     private View mPermissionView = null;
+
+    private boolean mDataLoaded = false;
+    private boolean mFabShown = true;
+    private boolean mFabAnimationRunning = false;
 
     private enum LoadState {
         IDLE, LOAD_TODAY, LOAD_WEEK, LOAD_MONTH, LOAD_YEAR, LOAD_SUCCESS, LOAD_FAIL
@@ -198,17 +204,12 @@ public class HoroscopeDetailsActivity extends Activity
         mMonthLayout.setOnToggleListener(this);
         mYearLayout.setOnToggleListener(this);
 
-        /* 设置状态栏透明 */
+        /* 添加滚动监听 */
         mScrollView.getViewTreeObserver().addOnScrollChangedListener(
                 new ViewTreeObserver.OnScrollChangedListener() {
                     @Override
                     public void onScrollChanged() {
-                        int scrollY = mScrollView.getScrollY();
-                        if (scrollY <= 20) {
-                            setStatusBarTransparent(true);
-                        } else {
-                            setStatusBarTransparent(false);
-                        }
+                        onScroll();
                     }
                 });
 
@@ -220,6 +221,85 @@ public class HoroscopeDetailsActivity extends Activity
         });
 
         doLoadData();
+    }
+
+    private void hideFab() {
+        if (!mFabAnimationRunning && mFabShown) {
+            mFabShown = false;
+            mSaveFab.setScaleY(1f);
+            mSaveFab.setScaleX(1f);
+            mSaveFab.animate()
+                    .scaleX(0.01f).scaleY(0.01f) // 此处设成 0 会崩溃，原因未知。。
+                    .setInterpolator(new DecelerateInterpolator(3f))
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            mFabAnimationRunning = true;
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mFabAnimationRunning = false;
+                            mSaveFab.setVisibility(View.GONE);
+                        }
+
+                        public void onAnimationCancel(Animator animation) {}
+                        public void onAnimationRepeat(Animator animation) {}
+                    })
+                    .setDuration(500)
+                    .start();
+        }
+    }
+
+    private void showFab() {
+        if (!mFabAnimationRunning && !mFabShown) {
+            mFabShown = true;
+            mSaveFab.setScaleY(0f);
+            mSaveFab.setScaleX(0f);
+            mSaveFab.animate()
+                    .scaleX(1f).scaleY(1f)
+                    .setInterpolator(new DecelerateInterpolator(3f))
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            mSaveFab.setVisibility(View.VISIBLE);
+                            mFabAnimationRunning = true;
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mFabAnimationRunning = false;
+                        }
+
+                        public void onAnimationCancel(Animator animation) {}
+                        public void onAnimationRepeat(Animator animation) {}
+                    })
+                    .setDuration(500)
+                    .start();
+        }
+    }
+
+    private void onScroll() {
+        if (!mDataLoaded) {
+            return;
+        }
+        int scrollY = mScrollView.getScrollY();
+        int headerHeight = mHeaderBg.getHeight();
+        int fabHeight = mSaveFab.getHeight();
+
+        /* 状态栏透明 */
+        if (scrollY <= headerHeight) {
+            setStatusBarTransparent(true);
+        } else {
+            setStatusBarTransparent(false);
+        }
+
+        /* 隐藏 fab 按钮 */
+        if (scrollY <= (headerHeight - (fabHeight / 2))) {
+            showFab();
+        } else {
+            hideFab();
+        }
     }
 
     @Override
@@ -262,7 +342,7 @@ public class HoroscopeDetailsActivity extends Activity
         }
 
         // 先创建目录
-        String dir = Environment.getExternalStorageDirectory().getAbsolutePath()
+        final String dir = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/Pictures/Haha/Horoscope/";
         File dirFile = new File(dir);
         if (!dirFile.exists()) {
@@ -278,16 +358,21 @@ public class HoroscopeDetailsActivity extends Activity
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
         int sec = calendar.get(Calendar.SECOND);
-        String fileName = String.format("%s_%d%d%d%d%d%d.png",
+        final String fileName = String.format("%s_%d%d%d%d%d%d.png",
                             HoroscopeInfo.getLatinName(mHoroscopeName),
                             year, month, day, hour, min, sec);
 
         // 开始保存
         Utils.saveViewAsPicture(
-                findViewById(R.id.horoscope_details_container), dir + fileName);
-
-        String hint = getResources().getString(R.string.complete) + ": " + dir + fileName;
-        Toast.makeText(this, hint, Toast.LENGTH_SHORT).show();
+                findViewById(R.id.horoscope_details_container), dir + fileName,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        String hint = getResources().getString(R.string.complete) + ": " + dir + fileName;
+                        Toast.makeText(HoroscopeDetailsActivity.this,
+                                hint, Toast.LENGTH_SHORT).show();
+                    }
+                }, null);
     }
 
     private void onLoadDataFinish() {
@@ -343,6 +428,13 @@ public class HoroscopeDetailsActivity extends Activity
         if (!mWeekLayout.isOpened()) {
             mWeekLayout.show();
         }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mDataLoaded = true;
+            }
+        }, 500);
     }
 
     private void doLoadDataAnimate() {

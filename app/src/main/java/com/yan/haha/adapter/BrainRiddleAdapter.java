@@ -113,6 +113,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        mCurrExpandedPosition = -1;
                         notifyDataSetChanged();
                         if (finishCallback != null) {
                             finishCallback.run();
