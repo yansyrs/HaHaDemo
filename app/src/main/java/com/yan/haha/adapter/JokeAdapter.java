@@ -137,6 +137,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         mCurrExpandedPosition = -1;
+                        mPreExpandedView = null;
                         notifyDataSetChanged();
                         if (finishCallback != null) {
                             finishCallback.run();
