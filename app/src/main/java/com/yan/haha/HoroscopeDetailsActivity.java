@@ -5,9 +5,11 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +22,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -72,7 +75,9 @@ public class HoroscopeDetailsActivity extends Activity
     private ImageView mLoading = null;
     private Button mReload = null;
 
-    private FloatingActionButton mSaveFab = null;
+    private String mSavedFileName = null;
+    private String mFabState = "save";
+    private FloatingActionButton mFab = null;
 
     private Horoscope mTodayInfo = null;
     private Horoscope mWeekInfo = null;
@@ -143,7 +148,7 @@ public class HoroscopeDetailsActivity extends Activity
         mYearLayout = (ExpandableLayout) findViewById(R.id.horoscope_details_year);
 
         mScrollView = (ScrollView) findViewById(R.id.horoscope_details_scroll_view);
-        mSaveFab = (FloatingActionButton) findViewById(R.id.horoscope_details_save_fab);
+        mFab = (FloatingActionButton) findViewById(R.id.horoscope_details_save_fab);
 
         /* 获取 header 的背景和头像图片名字 */
         mHeaderBgName = "horoscope_bg_" + Utils.getRandomNumber(1, 4);
@@ -155,7 +160,7 @@ public class HoroscopeDetailsActivity extends Activity
         String dateString = "";
         Date date = new Date(System.currentTimeMillis());
         dateString = DateFormat.getLongDateFormat(this).format(date);
-        mHeaderTitle.setText(mHoroscopeName + "   " + dateString);
+        mHeaderTitle.setText(mHoroscopeName + "  " + dateString);
 
         /* 设置 header 背景并根据背景颜色设置列表各项颜色 */
         Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(this,
@@ -213,10 +218,14 @@ public class HoroscopeDetailsActivity extends Activity
                     }
                 });
 
-        mSaveFab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveToFile();
+                if (mFabState.equals("save")) {
+                    saveToFile();
+                } else if (mFabState.equals("share") && mSavedFileName != null) {
+                    Utils.share(new File(mSavedFileName), Utils.FILE_TYPE_IMAGE);
+                }
             }
         });
 
@@ -226,9 +235,9 @@ public class HoroscopeDetailsActivity extends Activity
     private void hideFab() {
         if (!mFabAnimationRunning && mFabShown) {
             mFabShown = false;
-            mSaveFab.setScaleY(1f);
-            mSaveFab.setScaleX(1f);
-            mSaveFab.animate()
+            mFab.setScaleY(1f);
+            mFab.setScaleX(1f);
+            mFab.animate()
                     .scaleX(0.01f).scaleY(0.01f) // 此处设成 0 会崩溃，原因未知。。
                     .setInterpolator(new DecelerateInterpolator(3f))
                     .setListener(new Animator.AnimatorListener() {
@@ -240,7 +249,7 @@ public class HoroscopeDetailsActivity extends Activity
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             mFabAnimationRunning = false;
-                            mSaveFab.setVisibility(View.GONE);
+                            mFab.setVisibility(View.GONE);
                         }
 
                         public void onAnimationCancel(Animator animation) {}
@@ -254,15 +263,15 @@ public class HoroscopeDetailsActivity extends Activity
     private void showFab() {
         if (!mFabAnimationRunning && !mFabShown) {
             mFabShown = true;
-            mSaveFab.setScaleY(0f);
-            mSaveFab.setScaleX(0f);
-            mSaveFab.animate()
+            mFab.setScaleY(0f);
+            mFab.setScaleX(0f);
+            mFab.animate()
                     .scaleX(1f).scaleY(1f)
                     .setInterpolator(new DecelerateInterpolator(3f))
                     .setListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
-                            mSaveFab.setVisibility(View.VISIBLE);
+                            mFab.setVisibility(View.VISIBLE);
                             mFabAnimationRunning = true;
                         }
 
@@ -285,7 +294,7 @@ public class HoroscopeDetailsActivity extends Activity
         }
         int scrollY = mScrollView.getScrollY();
         int headerHeight = mHeaderBg.getHeight();
-        int fabHeight = mSaveFab.getHeight();
+        int fabHeight = mFab.getHeight();
 
         /* 状态栏透明 */
         if (scrollY <= headerHeight) {
@@ -335,7 +344,7 @@ public class HoroscopeDetailsActivity extends Activity
     private void saveToFile() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (!checkPermissionBeforeClick(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE, mSaveFab)) {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, mFab)) {
                 // 无权限，需要先授权
                 return;
             }
@@ -368,12 +377,19 @@ public class HoroscopeDetailsActivity extends Activity
                 new Runnable() {
                     @Override
                     public void run() {
-                        String hint = getResources().getString(R.string.complete) + ": " + dir + fileName;
+                        mSavedFileName = dir + fileName;
+                        String hint = getResources().getString(R.string.complete) + ": " + mSavedFileName;
                         Toast.makeText(HoroscopeDetailsActivity.this,
                                 hint, Toast.LENGTH_SHORT).show();
+
+                        // 将 fab 按钮改为分享
+                        mFabState = "share";
+                        mFab.setImageResource(R.drawable.ic_share);
                     }
                 }, null);
     }
+
+
 
     private void onLoadDataFinish() {
         mContent.setVisibility(View.VISIBLE);

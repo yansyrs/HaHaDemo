@@ -1,11 +1,17 @@
 package com.yan.haha;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -27,6 +33,7 @@ import com.yan.haha.units.HoroscopeInfo;
 import com.yan.haha.utils.GetHoroscope;
 import com.yan.haha.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,6 +64,9 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     private String mHoroscopeName = "双鱼座";
 
     private final static int MSG_ID_CHANGE_HOROSCOPE = 0;
+
+    private static int PERMISSION_REQ_CODE = 0;
+    private View mPermissionView = null;
 
     private enum LoadState {
         IDLE, LOADING, LOAD_SUCCESS, LOAD_FAIL
@@ -329,12 +339,90 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
             }
         });
 
+        mShareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                share();
+            }
+        });
+
         mCard.setVisibility(View.INVISIBLE);
         mLoadingImg.setVisibility(View.INVISIBLE);
         mLoadingFab.setVisibility(View.INVISIBLE);
         mReloadBtn.setVisibility(View.INVISIBLE);
         mName.setVisibility(View.INVISIBLE);
         mCoverFlow.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQ_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (mPermissionView != null) {
+                    mPermissionView.performClick();
+                    mPermissionView = null;
+                }
+            } else {
+                mPermissionView = null;
+            }
+        }
+    }
+
+    /*
+    申请外部存储读写权限
+    */
+    private boolean checkPermissionBeforeClick(String permission, View view) {
+        if (ContextCompat.checkSelfPermission(getActivity(), permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(getActivity(), new String[]{permission},
+                    PERMISSION_REQ_CODE);
+            mPermissionView = view;
+            return false;
+        }
+        return true;
+    }
+
+    private void share() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!checkPermissionBeforeClick(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, mShareBtn)) {
+                // 无权限，需要先授权
+                return;
+            }
+
+            // 先创建目录
+            final String dir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/Pictures/Haha/Horoscope/";
+            File dirFile = new File(dir);
+            if (!dirFile.exists()) {
+                dirFile.mkdirs();
+            }
+
+            // 以星座及时间为文件名
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int min = calendar.get(Calendar.MINUTE);
+            int sec = calendar.get(Calendar.SECOND);
+            final String fileName = String.format("%s_summary_%d%d%d%d%d%d.png",
+                    HoroscopeInfo.getLatinName(mHoroscopeName),
+                    year, month, day, hour, min, sec);
+
+            // 将 view 保存为图片
+            Utils.saveViewAsPicture(mCard, dir + fileName,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            // 保存成功，启动分享功能
+                            Utils.share(new File(dir + fileName), Utils.FILE_TYPE_IMAGE);
+                        }
+                    }, null);
+        }
     }
 
     @Override

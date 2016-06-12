@@ -306,11 +306,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, mJokeData.get(position).getBody());
-                    sendIntent.setType("text/plain");
-                    mContext.startActivity(sendIntent);
+                    Utils.share(mJokeData.get(position).getBody());
                 }
             });
 

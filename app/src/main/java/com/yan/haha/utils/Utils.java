@@ -1,9 +1,12 @@
 package com.yan.haha.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
@@ -13,10 +16,13 @@ import android.widget.ScrollView;
 
 import com.yan.haha.MainApplication;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Random;
 
 public class Utils {
+
+    public static final String FILE_TYPE_IMAGE = "image/*";
 
     public static int getScreenHeight() {
         Context context = MainApplication.getContext();
@@ -89,6 +95,13 @@ public class Utils {
         });
     }
 
+    public static void scanFileForUpdate(File file) {
+        MediaScannerConnection.scanFile(
+                MainApplication.getContext(),
+                new String[]{ file.getPath() },
+                null, null);
+    }
+
     /**
      * 将 View 的显示转成 Bitmap
      */
@@ -111,6 +124,9 @@ public class Utils {
             try {
                 FileOutputStream fos = new FileOutputStream(path);
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+                // 通知各应用刷新文件
+                scanFileForUpdate(new File(path));
                 return true;
             } catch (Exception e) {
                 Log.i("yan", "saveViewAsPicture error: " + e.getMessage());
@@ -152,5 +168,29 @@ public class Utils {
             }
         };
         task.execute();
+    }
+
+    public static void share(String text) {
+        Context ctx = MainApplication.getContext();
+        if (ctx != null) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+            sendIntent.setType("text/plain");
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(sendIntent);
+        }
+    }
+
+    public static void share(File file, String fileType) {
+        Context ctx = MainApplication.getContext();
+        if (ctx != null && file.exists() && file.isFile()) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            sendIntent.setType(fileType);
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(sendIntent);
+        }
     }
 }
