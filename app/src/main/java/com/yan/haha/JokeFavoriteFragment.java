@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.yan.haha.adapter.JokeAdapter;
+import com.yan.haha.adapter.JokeFavoriteAdapter;
 import com.yan.haha.units.Jokes;
 import com.yan.haha.utils.GetJoke;
 
@@ -33,7 +34,7 @@ import java.util.List;
 
 public class JokeFavoriteFragment extends ContentFragment{
     private RecyclerView mJokeList = null;
-    private JokeAdapter mAdapter = new JokeAdapter(MainActivity.getInstance());
+    private JokeFavoriteAdapter mAdapter = new JokeFavoriteAdapter(MainActivity.getInstance());
     private SQLiteDatabase db;
     private Jokes jokesObject;
     public static List<Jokes> jokesArray = new ArrayList<Jokes>();
@@ -71,20 +72,25 @@ public class JokeFavoriteFragment extends ContentFragment{
         mJokeList.setLayoutManager(lm);
         mJokeList.setAdapter(mAdapter);
         getJokeFromDb();
+        Log.d(TAG,"jokeFavoriteFragment onStart");
     }
 
     private void getJokeFromDb() {
+        jokesArray.clear();
         db = MainActivity.getInstance().openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
         //查询数据库
-        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title IS NOT NULL", null);
-        while (c.moveToNext()) {
-            int _id = c.getInt(c.getColumnIndex("_id"));
-            String title = c.getString(c.getColumnIndex("title")).replaceAll(CRLF_REPLACE, "\r\n");
-            String pubDate = c.getString(c.getColumnIndex("pubDate"));
-            String body = c.getString(c.getColumnIndex("body")).replaceAll(CRLF_REPLACE, "\r\n");
-            jokesObject = new Jokes(title, pubDate, body);
-            jokesArray.add(jokesObject);
-            Log.d(TAG, "_id=>" + _id + ", title=>" + title);
+        Cursor c = db.rawQuery("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='"+TABLE_NAME+"'", null);
+        if(c.moveToNext() && c.getInt(0) > 0) {
+            c = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title IS NOT NULL", null);
+            while (c.moveToNext()) {
+                int _id = c.getInt(c.getColumnIndex("_id"));
+                String title = c.getString(c.getColumnIndex("title")).replaceAll(CRLF_REPLACE, "\r\n");
+                String pubDate = c.getString(c.getColumnIndex("pubDate"));
+                String body = c.getString(c.getColumnIndex("body")).replaceAll(CRLF_REPLACE, "\r\n");
+                jokesObject = new Jokes(title, pubDate, body);
+                jokesArray.add(jokesObject);
+                Log.d(TAG, "_id=>" + _id + ", title=>" + title);
+            }
         }
         c.close();
         mAdapter.setJokeList((ArrayList<Jokes>) jokesArray);
