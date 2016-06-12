@@ -31,8 +31,8 @@ import com.yan.haha.utils.Utils;
 import java.util.ArrayList;
 
 public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> implements View.OnTouchListener {
-    private ArrayList<Jokes> mJokeData = new ArrayList<Jokes>();
-    private ArrayList<ViewHolder> mHolderList = new ArrayList<ViewHolder>();
+    protected ArrayList<Jokes> mJokeData = new ArrayList<Jokes>();
+    protected ArrayList<ViewHolder> mHolderList = new ArrayList<ViewHolder>();
 
     private static final int CIRCULAR_REVEAL_DURATION = 400;
     private static final int RUN_UP_ANI_DURATION = 700;
@@ -40,21 +40,21 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     private int mGoUpDuration = RUN_UP_ANI_DURATION;
 
     private final static int MSG_ID_RESET_GO_UP_ANI_STATE = 0;
-    private int mLastBindPosition = -1;
+    protected int mLastBindPosition = -1;
 
     private int mMenuItemHeight = -1;
 
-    private int mDelPosMark = -1;
+    protected int mDelPosMark = -1;
 
-    private View mPreExpandedView = null;
-    private int mCurrExpandedPosition = -1;
+    protected View mPreExpandedView = null;
+    protected int mCurrExpandedPosition = -1;
     private int positionX;
     private int positionY;
-    private Context mContext;
-    private SQLiteDatabase db;
-    private static final String DB_NAME = "jokes.db";
-    public static final String TABLE_NAME = "Jokes";
-    private static final String CRLF_REPLACE = ".crlf0.0";
+    protected Context mContext;
+    protected SQLiteDatabase db;
+    protected static final String DB_NAME = "jokes.db";
+    protected static final String TABLE_NAME = "Jokes";
+    protected static final String CRLF_REPLACE = ".crlf0.0";
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -127,7 +127,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         }
     }
 
-    private void sweepAnimation(View view, final Runnable finishCallback) {
+    protected void sweepAnimation(View view, final Runnable finishCallback) {
         view.setTranslationX(0);
         view.animate()
                 .translationX(Utils.getScreenWidth())
@@ -136,6 +136,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        mCurrExpandedPosition = -1;
                         notifyDataSetChanged();
                         if (finishCallback != null) {
                             finishCallback.run();
@@ -192,6 +193,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             a.setDuration((int)(targetHeight / view.getContext().getResources().getDisplayMetrics().density));
             anim.start();
             view.startAnimation(a);
+            Log.d("leungadd", "expand view");
         } else {
             view.setVisibility(View.VISIBLE);
         }
@@ -245,6 +247,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         final View ExpandedJokeView = item.findViewById(R.id.joke_expanded);
         int height = contentView.getHeight();
         int width = contentView.getWidth();
+        Log.d("leungadd","onmenuitemclick");
         if (mPreExpandedView != null) {
             collapseView(mPreExpandedView, width/2, height/2, width);
         }
@@ -323,6 +326,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                     joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 }
             }
+            tmpCursor.close();
             joke_favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
