@@ -353,11 +353,13 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                         joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                         icon.setImageResource(R.drawable.ic_joke_title_favorite);
                         mJokeFragment.startMenuItemAnim();
+                        mJokeFragment.setJokeMenuButtonBackground();
                     }else {
                         db.delete(TABLE_NAME, "title=?", new String[]{mTitle});
                         joke_favorite.setText(mContext.getText(R.string.favorite_capital));
                         joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
                         icon.setImageResource(R.drawable.ic_joke_title);
+                        mJokeFragment.setJokeMenuButtonBackground();
                     }
 
                     //查询

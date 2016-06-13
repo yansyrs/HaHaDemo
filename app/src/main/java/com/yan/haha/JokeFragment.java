@@ -1,9 +1,12 @@
 package com.yan.haha;
 
 import android.animation.Animator;
+import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,6 +45,8 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     private LoadingState mLoadState = LoadingState.IDLE;
     private boolean mIsFabShown = true;
     private SQLiteDatabase db;
+    protected static final String DB_NAME = "jokes.db";
+    protected static final String TABLE_NAME = "Jokes";
     private MenuItemAnim mMenuItemAnim;
     private ImageView mMenuButton;
 
@@ -57,13 +62,27 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.joke_menu, menu);
         mMenuButton = (ImageView) menu.findItem(R.id.joke_favorite_action).getActionView();
-        mMenuButton.setBackgroundResource(R.drawable.ic_favorite_red);
+        setJokeMenuButtonBackground();
         mMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainActivity.getInstance().replaceContentFragment(new JokeFavoriteFragment(),true);
             }
         });
+    }
+
+    public void setJokeMenuButtonBackground() {
+        db = MainActivity.getInstance().openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
+        Cursor tmpCursor = db.rawQuery("SELECT count(*) FROM "+TABLE_NAME, null);
+        if(tmpCursor.moveToNext() && tmpCursor.getInt(0) > 0) {
+            mMenuButton.setBackgroundResource(R.drawable.ic_favorite_red);
+            Log.d("leungadd","hasAnyFavoriteJoke");
+        }else {
+            Log.d("leungadd","not hasAnyFavoriteJoke");
+            mMenuButton.setBackgroundResource(R.drawable.ic_favorite_white);
+        }
+        tmpCursor.close();
+        db.close();
     }
 
     public void startMenuItemAnim() {
