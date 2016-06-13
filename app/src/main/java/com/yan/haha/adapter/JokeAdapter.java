@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yan.haha.JokeFragment;
 import com.yan.haha.R;
 import com.yan.haha.units.Jokes;
 import com.yan.haha.utils.Utils;
@@ -56,6 +57,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     protected static final String DB_NAME = "jokes.db";
     protected static final String TABLE_NAME = "Jokes";
     protected static final String CRLF_REPLACE = ".crlf0.0";
+    private JokeFragment mJokeFragment;
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,8 +78,9 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         mJokeData = jokeList;
     }
 
-    public JokeAdapter(Context context) {
+    public JokeAdapter(Context context, JokeFragment fragment) {
         this.mContext = context;
+        this.mJokeFragment = fragment;
     }
 
     public void setJokeList(ArrayList<Jokes> jokeList) {
@@ -349,6 +352,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                         joke_favorite.setText(mContext.getText(R.string.unfavorite_capital));
                         joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                         icon.setImageResource(R.drawable.ic_joke_title_favorite);
+                        mJokeFragment.startMenuItemAnim();
                     }else {
                         db.delete(TABLE_NAME, "title=?", new String[]{mTitle});
                         joke_favorite.setText(mContext.getText(R.string.favorite_capital));

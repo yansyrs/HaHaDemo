@@ -1,9 +1,6 @@
 package com.yan.haha;
 
 import android.animation.Animator;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +26,7 @@ import java.util.ArrayList;
 
 public class JokeFragment extends ContentFragment implements OnDataFinishedListener {
     private RecyclerView mJokeList = null;
-    private JokeAdapter mAdapter = new JokeAdapter(MainActivity.getInstance());
+    private JokeAdapter mAdapter = new JokeAdapter(MainActivity.getInstance(), JokeFragment.this);
     private ArrayList<Jokes> mJokeData = new ArrayList<Jokes>();
 
     private static int REQUEST_PAGE = 1;
@@ -45,6 +42,8 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     private LoadingState mLoadState = LoadingState.IDLE;
     private boolean mIsFabShown = true;
     private SQLiteDatabase db;
+    private MenuItemAnim mMenuItemAnim;
+    private ImageView mMenuButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +56,25 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.joke_menu, menu);
+        mMenuButton = (ImageView) menu.findItem(R.id.joke_favorite_action).getActionView();
+        mMenuButton.setBackgroundResource(R.drawable.ic_favorite_red);
+        mMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.getInstance().replaceContentFragment(new JokeFavoriteFragment(),true);
+            }
+        });
+    }
+
+    public void startMenuItemAnim() {
+        try {
+            mMenuItemAnim = new MenuItemAnim();
+            mMenuItemAnim.setDuration(1000);
+            mMenuButton.startAnimation(mMenuItemAnim);
+        }catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -68,7 +86,8 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.joke_favorite_action) {
-            MainActivity.getInstance().replaceContentFragment(new JokeFavoriteFragment(),true);
+            //被onCreateOptionsMenu中的imageView的click事件替代
+            //MainActivity.getInstance().replaceContentFragment(new JokeFavoriteFragment(),true);
             return true;
         }
 
