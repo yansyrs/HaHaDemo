@@ -73,12 +73,15 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
 
     public void setJokeMenuButtonBackground() {
         db = MainActivity.getInstance().openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
-        Cursor tmpCursor = db.rawQuery("SELECT count(*) FROM "+TABLE_NAME, null);
+        Cursor tmpCursor = db.rawQuery("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='"+TABLE_NAME+"'", null);
+        //上面先判断表是否存在
         if(tmpCursor.moveToNext() && tmpCursor.getInt(0) > 0) {
-            mMenuButton.setBackgroundResource(R.drawable.ic_favorite_red);
-            Log.d("leungadd","hasAnyFavoriteJoke");
+            tmpCursor = db.rawQuery("SELECT count(*) FROM "+TABLE_NAME, null);
+            if(tmpCursor.moveToNext() && tmpCursor.getInt(0) > 0)
+                mMenuButton.setBackgroundResource(R.drawable.ic_favorite_red);
+            else
+                mMenuButton.setBackgroundResource(R.drawable.ic_favorite_white);
         }else {
-            Log.d("leungadd","not hasAnyFavoriteJoke");
             mMenuButton.setBackgroundResource(R.drawable.ic_favorite_white);
         }
         tmpCursor.close();
