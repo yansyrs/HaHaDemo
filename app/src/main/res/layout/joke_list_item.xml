@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            android:id="@+id/joke_unexpanded_icon"
             android:layout_width="@dimen/brain_riddle_icon"
             android:layout_height="@dimen/brain_riddle_icon"
             android:src="@drawable/ic_joke_title" />

@@ -34,7 +34,6 @@ public class JokeFavoriteAdapter extends JokeAdapter {
         super.onBindViewHolder(holder, position);
         ViewGroup container = holder.mLayoutView;
 
-        Log.d("leungadd", "on favorite onbindviewholder");
         // 设置 menu item 内容
         final TextView title = (TextView) container.findViewById(R.id.joke_title);
         TextView detail = (TextView) container.findViewById(R.id.joke_detail);
@@ -130,14 +129,5 @@ public class JokeFavoriteAdapter extends JokeAdapter {
         }
     }
 
-    @Override
-    public void deleteItem(int position, Runnable finishCallback) {
-        Log.d("leungadd","position="+position);
-        mLastBindPosition = position - 1;
-        mDelPosMark = position;
-        ViewHolder holder = mHolderList.get(position);
-        sweepAnimation(holder.mLayoutView, finishCallback);
-        mJokeData.remove(position);
-    }
 
 }
