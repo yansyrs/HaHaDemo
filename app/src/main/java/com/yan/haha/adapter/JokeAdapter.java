@@ -22,6 +22,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yan.haha.R;
@@ -194,7 +195,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             a.setDuration((int)(targetHeight / view.getContext().getResources().getDisplayMetrics().density));
             anim.start();
             view.startAnimation(a);
-            Log.d("leungadd", "expand view");
         } else {
             view.setVisibility(View.VISIBLE);
         }
@@ -248,7 +248,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         final View ExpandedJokeView = item.findViewById(R.id.joke_expanded);
         int height = contentView.getHeight();
         int width = contentView.getWidth();
-        Log.d("leungadd","onmenuitemclick");
         if (mPreExpandedView != null) {
             collapseView(mPreExpandedView, width/2, height/2, width);
         }
@@ -279,6 +278,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         ViewGroup container = holder.mLayoutView;
 
         // 设置 menu item 内容
+        final ImageView icon = (ImageView) container.findViewById(R.id.joke_unexpanded_icon);
         TextView title = (TextView) container.findViewById(R.id.joke_title);
         TextView detail = (TextView) container.findViewById(R.id.joke_detail);
         TextView date = (TextView) container.findViewById(R.id.joke_date);
@@ -325,6 +325,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                 } else {
                     joke_favorite.setText(mContext.getText(R.string.unfavorite_capital));
                     joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                    icon.setImageResource(R.drawable.ic_joke_title_favorite);
                 }
             }
             tmpCursor.close();
@@ -347,10 +348,12 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
                         db.insert(TABLE_NAME, null, cv);
                         joke_favorite.setText(mContext.getText(R.string.unfavorite_capital));
                         joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                        icon.setImageResource(R.drawable.ic_joke_title_favorite);
                     }else {
                         db.delete(TABLE_NAME, "title=?", new String[]{mTitle});
                         joke_favorite.setText(mContext.getText(R.string.favorite_capital));
                         joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+                        icon.setImageResource(R.drawable.ic_joke_title);
                     }
 
                     //查询
@@ -409,6 +412,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         mDelPosMark = position;
         ViewHolder holder = mHolderList.get(position);
         sweepAnimation(holder.mLayoutView, finishCallback);
+        mJokeData.remove(position);
     }
 
     public void refresh() {
