@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="10dp"
     android:background="@color/horoscope_details_item_content_bg_2"
@@ -8,72 +8,83 @@
 
     <TextView
         android:id="@+id/year_info"
-        style="@style/details_label"
+        style="@style/details_content_colored"
         android:text="稳定发展的成长之年" />
 
     <TextView
-        style="@style/details_label"
-        android:text="综合" />
+        style="@style/details_label_colored"
+        android:background="@color/material_amber"
+        android:text="总评" />
 
     <TextView
         android:id="@+id/year_overall"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/details_content_colored"
+        android:layout_below="@id/year_info"
         android:text="在过去一年里，大多数双鱼座都忙碌至极，但也获得了过去未有过的快速成长。机会源源不断地上门让双鱼们舍不得放弃就只有努力跟上，多种工种的考验也让你们的事业更上一个台阶，成为职场上当仁不让的多面手。而在未来一年，这种趋势还将继续下去，你们会在职场千面手的道路上一路狂奔不回头。当然，这样的辛苦工作也会给你们带来足以安慰的经济回报，职业发展走势良好。春节过后，连续两次的双鱼座超级新月（包括一次日食）将以恢弘的气势为你们揭开新一年的序幕。双鱼座应该利用这一段难得松快的时间解决此前因为忙碌而无暇处理的财务问题，也是走亲访友拉近关系的好时候。同时，这一阶段的财务变动也会较大，收入虽然不错，但支出也明显增多，应做到心中有数，而非过后发现赚的还没花的多。4月至7月将是全年发展最快的一段时间，如有任何重要事项可以在这段时间快速铺开。进入下半年，节奏会暂时放缓，不妨静下心来处理私人问题。事业方面也已经上正轨，宜投入更多精力甄选强势的合作机会，尤其注意挑选靠谱合作对象，而非被人忽悠上船。" />
 
     <TextView
-        style="@style/details_label"
-        android:text="事业" />
+        style="@style/details_label_colored"
+        android:layout_below="@id/year_info"
+        android:background="@color/material_brown"
+        android:text="综合" />
 
     <TextView
         android:id="@+id/year_work"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/details_content_colored"
+        android:layout_below="@id/year_overall"
         android:text="未来一年将是双鱼座事业走向分水岭的一年。在过去一年中，双鱼们都以前所未有的努力奋力拼搏，尽可能拓展自身的人脉关系和事业渠道，也获得了喜人成绩。而在新来到的2016年中，你们还会将这一趋势延续，尤其在上半年会有机会进行快速扩张，让事业摊子快速铺开。对管理者而言，这是尤其应该注重拓展人脉关系和并购优质资产的时机，只要你有意愿，就会有合适机会送上门来。对自由职业者来说，也是快速推广自身，轻松捞金的时机，但要注意不要高估自身能力，导致轻易承诺最终却无法兑现，影响后期的长远发展。打工者则会有机会获得上级青睐被胜任重要部分岗位，同时也会接受压力考验，必须放弃过去浑水摸鱼的心理，靠实际能力才能博得认同。进入下半年，形势将会有些不同，工作模式也将从独立拼搏升级到被人找上门来合作或是注资。部分在此前还算小心谨慎的双鱼座可以将此前好运继续下去，并通过合作方式获得更多资源和提升。但另一些之前偏好投机主义的个人容易因为随意签署协议或是想通过合作捞取好处，最后却被人拖下水吃鸡不成蚀把米，反而丢掉大好局面。" />
 
     <TextView
-        style="@style/details_label"
-        android:text="爱情" />
+        style="@style/details_label_colored"
+        android:layout_below="@id/year_overall"
+        android:background="@color/material_deep_orange"
+        android:text="事业" />
 
     <TextView
         android:id="@+id/year_love"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/details_content_colored"
+        android:layout_below="@id/year_work"
         android:text="自2015年中旬木星进入狮子座开始，大多数双鱼座就忙碌于生活转变带来的工作与生活琐事，即便有桃花运也无暇分神。这一状况在春节之后才会好转，届时你们将终于从繁忙的工作中分出一些精力给私人生活。对单身双鱼座来说，春节之后一直到3月下旬都是较为容易脱单的时间。一波桃花会席卷而来，让你的生活完全被约会占满，但同时也要小心花钱如流水。这一时段碰到的对象大多条件不错，但性格也较为冲动，属于打是亲骂是爱的欢喜冤家型，且感情来得快也去得快，若不能快速决断，则在进入4月份之后容易感觉转淡，感情生活亦回复平淡。有伴者则上半年都相对稳定，两人在很多问题上都步调一致，也要投入更多时间与双方家人的相处或是处置房产问题，部分适龄人士会忙于备孕，也是相对容易怀孕的时间，无计划者请提早做好措施。来到下半年，感情发展将面临分水岭。单身人士虽然还有机会遇到很多看上去不错的对象，但或是虚荣之辈，或是徒有其表，总体都会有些小问题，自己却容易因为家庭压力而被迫接受拍拖，但是否真的就是对的人却见仁见智。有伴人士也会在下半年进入分手和结婚的高峰期。尤其9月中旬的处女座半影日食将激发已有感情关系中存在的问题，若是沟通无果可能走向终结。但对单身人士而言，未来半年却有望邂逅宿命对象。" />
 
     <TextView
-        style="@style/details_label"
-        android:text="健康" />
+        style="@style/details_label_colored"
+        android:layout_below="@id/year_work"
+        android:background="@color/material_cyan"
+        android:text="爱情" />
 
     <TextView
         android:id="@+id/year_health"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/details_content_colored"
+        android:layout_below="@id/year_love"
         android:text="今年的健康运势并不理想，平时除了履行自己给别人的健康建议之外，还要保持严谨认真的态度来对待自己的身体" />
 
     <TextView
-        style="@style/details_label"
-        android:text="金钱" />
+        style="@style/details_label_colored"
+        android:background="@color/material_pink"
+        android:layout_below="@id/year_love"
+        android:text="健康" />
 
     <TextView
         android:id="@+id/year_money"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/details_content_colored"
+        android:layout_below="@id/year_health"
         android:text="在2016年中，双鱼座的财富指数将随着事业指数持续攀高。一方面随着天冥刑的出相位，很多此前总是堵不上的窟窿终于算是填平了，现金流逐渐稳定，不再有大问题出现；另一方面，声誉和地位的提升也让事业方面的收入明显增加，手中可以运用的资金更加充沛。整体而言，上半年的收入较为可预期，而进入下半年，双鱼们的际遇却可能天差地别。上半年中，赚钱主要还是靠自身的努力，可以通过勤奋工作获得相应的奖金提升。投资运在这期间也会有亮眼表现，但在年后一段时间容易出现大起大落，收入提升的同时，支出也明显提高，好在最后还能实现盈利。进入下半年后，正财运整体略有减弱。但有部分创业的双鱼座将有望因为收到大额投资而实现资产攀升，另一些双鱼座也会有机会因为帮人介绍大单生意或是与人合作投资而获得中间收益。但对此前过于投机取巧的双鱼座而言，却要面临正财减少，还会因为被人踢爆而承担损失的挑战。上半年是否能够戒骄戒躁，以平常心对待眼前的机遇，将是决定下半年面临一飞冲天还是半空跌落的关键。" />
 
     <TextView
-        style="@style/details_label"
-        android:text="幸运石" />
+        style="@style/details_label_colored"
+        android:background="@color/material_deep_purple"
+        android:layout_below="@id/year_health"
+        android:text="金钱" />
 
     <TextView
         android:id="@+id/year_lucky_stone"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/details_content_colored"
+        android:layout_below="@id/year_money"
         android:text="石榴石" />
-</LinearLayout>
+
+    <TextView
+        style="@style/details_label_colored"
+        android:background="@color/material_light_green"
+        android:layout_below="@id/year_money"
+        android:text="幸运石" />
+</RelativeLayout>

@@ -132,6 +132,29 @@ public class HoroscopeDetailsActivity extends Activity
         }
     }
 
+    private class DescriptionItem {
+        public String mLabel;
+        public String mText;
+
+        public DescriptionItem(String label, String text) {
+            mLabel = label;
+            mText = text;
+        }
+    }
+
+    private DescriptionItem getDescriptionItem(String text) {
+        DescriptionItem item = null;
+
+        Pattern p = Pattern.compile("(.{2,4})：(.*)");
+        Matcher m = p.matcher(text);
+        if (m.matches()) {
+            item = new DescriptionItem(m.group(1), m.group(2));
+        } else {
+            item = new DescriptionItem(null, text);
+        }
+        return item;
+    }
+
     private void initViews() {
         mHeaderBg = (ImageView) findViewById(R.id.horoscope_details_bg);
         mHeaderAvatar = (ImageView) findViewById(R.id.horoscope_details_avatar);
@@ -410,16 +433,46 @@ public class HoroscopeDetailsActivity extends Activity
         Pattern p = Pattern.compile("(.*)(作者：.*$)");
         Matcher m = p.matcher(mWeekInfo.getHealth());
         if (m.matches()) {
-            ((TextView) findViewById(R.id.week_author)).setText(m.group(2));
-            ((TextView) findViewById(R.id.week_health)).setText(m.group(1));
+            DescriptionItem weekAuthor = getDescriptionItem(m.group(2));
+            DescriptionItem weekHealth = getDescriptionItem(m.group(1));
+            if (weekAuthor.mLabel != null) {
+                ((TextView) findViewById(R.id.week_author_label)).setText(weekAuthor.mLabel);
+            }
+            ((TextView) findViewById(R.id.week_author)).setText(weekAuthor.mText);
+            if (weekHealth.mLabel != null) {
+                ((TextView) findViewById(R.id.week_health_label)).setText(weekHealth.mLabel);
+            }
+            ((TextView) findViewById(R.id.week_health)).setText(weekHealth.mText);
         } else {
+            findViewById(R.id.week_author_label).setVisibility(View.GONE);
             findViewById(R.id.week_author).setVisibility(View.GONE);
-            ((TextView) findViewById(R.id.week_health)).setText(mWeekInfo.getHealth());
+
+            DescriptionItem weekHealth = getDescriptionItem(mWeekInfo.getHealth());
+            if (weekHealth.mLabel != null) {
+                ((TextView) findViewById(R.id.week_health_label)).setText(weekHealth.mLabel);
+            }
+            ((TextView) findViewById(R.id.week_health)).setText(weekHealth.mText);
         }
-        ((TextView) findViewById(R.id.week_job)).setText(mWeekInfo.getJob());
-        ((TextView) findViewById(R.id.week_love)).setText(mWeekInfo.getLove());
-        ((TextView) findViewById(R.id.week_money)).setText(mWeekInfo.getMoney());
-        ((TextView) findViewById(R.id.week_work)).setText(mWeekInfo.getWork());
+        DescriptionItem weekJob = getDescriptionItem(mWeekInfo.getJob());
+        DescriptionItem weekLove = getDescriptionItem(mWeekInfo.getLove());
+        DescriptionItem weekMoney = getDescriptionItem(mWeekInfo.getMoney());
+        DescriptionItem weekWork = getDescriptionItem(mWeekInfo.getWork());
+        if (weekJob.mLabel != null) {
+            ((TextView) findViewById(R.id.week_job_label)).setText(weekJob.mLabel);
+        }
+        ((TextView) findViewById(R.id.week_job)).setText(weekJob.mText);
+        if (weekLove.mLabel != null) {
+            ((TextView) findViewById(R.id.week_love_label)).setText(weekLove.mLabel);
+        }
+        ((TextView) findViewById(R.id.week_love)).setText(weekLove.mText);
+        if (weekMoney.mLabel != null) {
+            ((TextView) findViewById(R.id.week_money_label)).setText(weekMoney.mLabel);
+        }
+        ((TextView) findViewById(R.id.week_money)).setText(weekMoney.mText);
+        if (weekWork.mLabel != null) {
+            ((TextView) findViewById(R.id.week_work_label)).setText(weekWork.mLabel);
+        }
+        ((TextView) findViewById(R.id.week_work)).setText(weekWork.mText);
 
         /* 本月 */
         ((TextView) findViewById(R.id.month_overall)).setText(mMonthInfo.getSummary());

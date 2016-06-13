@@ -23,4 +23,6 @@
     <string name="overall">综合</string>
     <string name="work">工作</string>
     <string name="complete">保存完毕</string>
+    <string name="job">求职</string>
+    <string name="author">作者</string>
 </resources>

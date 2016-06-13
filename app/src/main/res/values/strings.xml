@@ -26,4 +26,7 @@
     <string name="love">Love</string>
     <string name="health">Health</string>
     <string name="money">Money</string>
+    <string name="author">Author</string>
+    <string name="job">Job</string>
+
 </resources>

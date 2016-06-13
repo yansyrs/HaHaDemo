@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="10dp"
     android:background="@color/horoscope_details_item_content_bg_2"
@@ -8,44 +8,77 @@
 
     <TextView
         android:id="@+id/week_author"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="作者：马子晴" />
+        style="@style/details_content_colored"
+        android:text="马子晴" />
+
+    <TextView
+        style="@style/details_label_colored"
+        android:id="@+id/week_author_label"
+        android:background="@color/material_brown"
+        android:text="@string/author" />
 
     <TextView
         android:id="@+id/week_health"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="健康：家人的健康需要你多加关注。容易有运动伤害。 " />
+        android:layout_below="@id/week_author"
+        style="@style/details_content_colored"
+        android:text="家人的健康需要你多加关注。容易有运动伤害。 " />
+
+    <TextView
+        style="@style/details_label_colored"
+        android:id="@+id/week_health_label"
+        android:layout_below="@id/week_author"
+        android:background="@color/material_deep_orange"
+        android:text="@string/health" />
 
     <TextView
         android:id="@+id/week_job"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="求职：不计结果，抱着学习心态去就好。" />
+        android:layout_below="@id/week_health"
+        style="@style/details_content_colored"
+        android:text="不计结果，抱着学习心态去就好。" />
+
+    <TextView
+        android:id="@+id/week_job_label"
+        style="@style/details_label_colored"
+        android:layout_below="@id/week_health"
+        android:background="@color/material_cyan"
+        android:text="@string/job" />
 
     <TextView
         android:id="@+id/week_love"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="恋情：感情稳定，彼此包容，是适合结婚的季节。单身汪要有被催婚、被相亲的心理准备。" />
+        android:layout_below="@id/week_job"
+        style="@style/details_content_colored"
+        android:text="感情稳定，彼此包容，是适合结婚的季节。单身汪要有被催婚、被相亲的心理准备。" />
+
+    <TextView
+        android:id="@+id/week_love_label"
+        style="@style/details_label_colored"
+        android:layout_below="@id/week_job"
+        android:background="@color/material_pink"
+        android:text="@string/love" />
 
     <TextView
         android:id="@+id/week_money"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="财运：和家人的财务状况紧密联系。有购置或处理物业的时机。" />
+        style="@style/details_content_colored"
+        android:layout_below="@id/week_love"
+        android:text="和家人的财务状况紧密联系。有购置或处理物业的时机。" />
+
+    <TextView
+        android:id="@+id/week_money_label"
+        style="@style/details_label_colored"
+        android:layout_below="@id/week_love"
+        android:background="@color/material_deep_purple"
+        android:text="@string/money" />
 
     <TextView
         android:id="@+id/week_work"
-        android:padding="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="工作：家庭事务多，工作的上进表现会受影响。虽然好学爱聊，但涉及到关键问题上你又会呈现一种退守的状态。子晴小提醒，搭档给力，多拜托他帮忙吧。" />
-</LinearLayout>
+        style="@style/details_content_colored"
+        android:layout_below="@id/week_money"
+        android:text="家庭事务多，工作的上进表现会受影响。虽然好学爱聊，但涉及到关键问题上你又会呈现一种退守的状态。子晴小提醒，搭档给力，多拜托他帮忙吧。" />
+
+    <TextView
+        android:id="@+id/week_work_label"
+        style="@style/details_label_colored"
+        android:background="@color/material_light_green"
+        android:layout_below="@id/week_money"
+        android:text="@string/work" />
+</RelativeLayout>

@@ -25,6 +25,33 @@ public class Horoscope {
     private int weekth;
     private String luckyStone;
 
+    public void set(String type, String name, String dateTime, String complexPoints,
+                    String QFriend, String color, String health, String healthPoints,
+                    String love, String lovePoints, String money, String moneyPoints,
+                    int luckyNum, String summary, String summaryTitle, String work,
+                    String workPoints, String job, int weekth, String luckyStone) {
+        this.type = type.trim();
+        this.name = name.trim();
+        this.dateTime = dateTime.trim();
+        this.complexPoints = complexPoints.trim();
+        this.QFriend = QFriend.trim();
+        this.color = color.trim();
+        this.health = health.trim();
+        this.healthPoints = healthPoints.trim();
+        this.love = love.trim();
+        this.lovePoints = lovePoints.trim();
+        this.money = money.trim();
+        this.moneyPoints = moneyPoints.trim();
+        this.luckyNum = luckyNum;
+        this.summary = summary.trim();
+        this.summaryTitle = summaryTitle.trim();
+        this.work = work.trim();
+        this.workPoints = workPoints.trim();
+        this.job = job.trim();
+        this.weekth = weekth;
+        this.luckyStone = luckyStone.trim();
+    }
+
     /** 星座运程:today,tomorrow
      *   type:查询类型
      *   name:星座名称
@@ -42,18 +69,8 @@ public class Horoscope {
     public Horoscope(String type, String name, String dateTime, String complexPoints, String QFriend, String color,
                      String healthPoints, String lovePoints, String moneyPoints, int luckyNum, String summary, String workPoints) {
         super();
-        this.type = type;
-        this.name = name;
-        this.dateTime = dateTime;
-        this.complexPoints = complexPoints;
-        this.QFriend = QFriend;
-        this.color = color;
-        this.healthPoints = healthPoints;
-        this.lovePoints = lovePoints;
-        this.moneyPoints = moneyPoints;
-        this.luckyNum = luckyNum;
-        this.summary = summary;
-        this.workPoints = workPoints;
+        set(type, name, dateTime, complexPoints, QFriend, color, "", healthPoints, "",
+                lovePoints, "", moneyPoints, luckyNum, summary, "", "", workPoints, "", -1, "");
     }
 
 
@@ -71,15 +88,8 @@ public class Horoscope {
     public Horoscope(String type, String name, String dateTime, String health, String job, String love,
                      String money, int weekth, String work) {
         super();
-        this.type = type;
-        this.name = name;
-        this.dateTime = dateTime;
-        this.health = health;
-        this.job = job;
-        this.love = love;
-        this.money = money;
-        this.weekth = weekth;
-        this.work = work;
+        set(type, name, dateTime, "", "", "", health, "", love, "",
+                money, "", -1, "", "", work, "", job, weekth, "");
     }
 
 
@@ -96,14 +106,8 @@ public class Horoscope {
     public Horoscope(String type, String name, String dateTime, String summary, String health, String love,
                      String money, String work) {
         super();
-        this.type = type;
-        this.name = name;
-        this.dateTime = dateTime;
-        this.summary = summary;
-        this.health = health;
-        this.love = love;
-        this.money = money;
-        this.work = work;
+        set(type, name, dateTime, "", "", "", health, "", love, "",
+                money, "", -1, summary, "", work, "", "", -1, "");
     }
 
 
@@ -122,16 +126,8 @@ public class Horoscope {
     public Horoscope(String type, String name, String dateTime, String summary, String summaryTitle,
                      String work, String love, String health, String money, String luckyStone) {
         super();
-        this.type = type;
-        this.name = name;
-        this.dateTime = dateTime;
-        this.summary = summary;
-        this.summaryTitle = summaryTitle;
-        this.work = work;
-        this.love = love;
-        this.health = health;
-        this.money = money;
-        this.luckyStone = luckyStone;
+        set(type, name, dateTime, "", "", "", health, "", love, "", money, "",
+                -1, summary, summaryTitle, work, "", "", -1, luckyStone);
     }
 
     public String getType() {
