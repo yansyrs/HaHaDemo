@@ -24,6 +24,8 @@ import java.util.ArrayList;
 public class JokeFavoriteAdapter extends JokeAdapter {
 
     private static final String TAG = "JokeFavoriteAdapter";
+    private static final String ACTION_DELETE = "delete";
+    private static final String ACTION_INSERT = "insert";
 
     public JokeFavoriteAdapter(Context context) {
         mContext = context;
@@ -92,42 +94,39 @@ public class JokeFavoriteAdapter extends JokeAdapter {
             joke_favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String mTitle = mJokeData.get(position).getTitle().replaceAll("\\r\\n", CRLF_REPLACE);
-                    String mPubDate = mJokeData.get(position).getPubDate();
-                    String mBody = mJokeData.get(position).getBody().replaceAll("\\r\\n", CRLF_REPLACE);
-                    ContentValues cv = new ContentValues();
-                    cv.put("title", mTitle);
-                    cv.put("pubDate", mPubDate);
-                    cv.put("body", mBody);
-
-                    String sql = "create table if not exists " + TABLE_NAME + " (_id integer primary key," +
-                            " title text, pubDate text, body text)";
-                    db = mContext.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
-                    db.execSQL(sql);
                     if (joke_favorite.getText().equals(mContext.getText(R.string.favorite_capital))) {
-                        db.insert(TABLE_NAME, null, cv);
                         joke_favorite.setText(mContext.getText(R.string.unfavorite_capital));
                         joke_favorite.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                        deleteOrInsertItemFromDB(position,ACTION_INSERT);
                     } else {
-                        db.delete(TABLE_NAME, "title=?", new String[]{mTitle});
-                        deleteItem(position, null);
+                        deleteOrInsertItemFromDB(position,ACTION_DELETE);
+                        deleteItem(position,null,true);
                     }
-
-                    //查询
-                    Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title IS NOT NULL", null);
-                    while (c.moveToNext()) {
-                        int _id = c.getInt(c.getColumnIndex("_id"));
-                        String title = c.getString(c.getColumnIndex("title"));
-                        Log.d(TAG, "_id=>" + _id + ", title=>" + title);
-                    }
-                    c.close();
-                    //查询end
-                    db.close();
-                    Log.d(TAG, "db... success");
                 }
             });
         }
     }
 
+    public void deleteOrInsertItemFromDB(int position, String deleteOrInsert) {
+        String mTitle = mJokeData.get(position).getTitle().replaceAll("\\r\\n", CRLF_REPLACE);
+        String mPubDate = mJokeData.get(position).getPubDate();
+        String mBody = mJokeData.get(position).getBody().replaceAll("\\r\\n", CRLF_REPLACE);
+        ContentValues cv = new ContentValues();
+        cv.put("title", mTitle);
+        cv.put("pubDate", mPubDate);
+        cv.put("body", mBody);
+
+        String sql = "create table if not exists " + TABLE_NAME + " (_id integer primary key," +
+                " title text, pubDate text, body text)";
+        db = mContext.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
+        db.execSQL(sql);
+        if(deleteOrInsert.equals(ACTION_DELETE)) {
+            db.delete(TABLE_NAME, "title=?", new String[]{mTitle});
+        }else if(deleteOrInsert.equals(ACTION_INSERT)) {
+            db.insert(TABLE_NAME, null, cv);
+        }
+        db.close();
+
+    }
 
 }

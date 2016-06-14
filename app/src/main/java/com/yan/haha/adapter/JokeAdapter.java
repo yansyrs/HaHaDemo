@@ -134,7 +134,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
     protected void sweepAnimation(View view, final Runnable finishCallback) {
         view.setTranslationX(0);
         view.animate()
-                .translationX(Utils.getScreenWidth())
+                .translationX(-Utils.getScreenWidth())
                 .setInterpolator(new DecelerateInterpolator(3.f))
                 .setDuration(RUN_UP_ANI_DURATION)
                 .setListener(new Animator.AnimatorListener() {
@@ -413,11 +413,13 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
         }
     }
 
-    public void deleteItem(int position, Runnable finishCallback) {
+    public void deleteItem(int position, Runnable finishCallback, boolean withSweepAnim) {
         mLastBindPosition = position - 1;
         mDelPosMark = position;
         ViewHolder holder = mHolderList.get(position);
-        sweepAnimation(holder.mLayoutView, finishCallback);
+        if(withSweepAnim) {
+            sweepAnimation(holder.mLayoutView, finishCallback);
+        }
         mJokeData.remove(position);
     }
 
