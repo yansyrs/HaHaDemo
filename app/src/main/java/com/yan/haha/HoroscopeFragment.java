@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.dolphinwang.imagecoverflow.CoverFlowView;
 import com.yan.haha.adapter.HoroscopeCoverFlowAdapter;
 import com.yan.haha.units.Horoscope;
 import com.yan.haha.units.HoroscopeInfo;
+import com.yan.haha.utils.Config;
 import com.yan.haha.utils.GetHoroscope;
 import com.yan.haha.utils.Utils;
 
@@ -44,6 +46,9 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         CoverFlowView.CoverFlowListener<HoroscopeCoverFlowAdapter> {
     private Horoscope mHoroscope = null;
     private GetHoroscope mProcess = null;
+
+    private boolean mIsFirstLoad = true;
+    private boolean mIsSlimMode = false;
 
     private CardView mCard = null;
     private ImageView mBgImg = null;
@@ -61,7 +66,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     private ScrollView mScrollView = null;
     private ViewGroup mScrollSelector = null;
 
-    private String mHoroscopeName = "双鱼座";
+    private String mHoroscopeName = "水瓶座";
 
     private final static int MSG_ID_CHANGE_HOROSCOPE = 0;
 
@@ -95,6 +100,14 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.horoscope_fragment, container, false);
+    }
+
+    /**
+     * 设置精简模式，需要在 Fragment 启动前设置
+     * @param enable 是否开启精简模式
+     */
+    public void setSlimMode(boolean enable) {
+        mIsSlimMode = enable;
     }
 
     private HoroscopeInfo getHoroscopeInfo(String name) {
@@ -187,7 +200,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
             showCard();
         } else {
             mCard.animate()
-                    .translationY(0 - mCard.getHeight())
+                    .translationY(0 - mCard.getHeight() - 10)
                     .setDuration(500)
                     .setListener(new Animator.AnimatorListener() {
                         @Override
@@ -266,10 +279,23 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
     @Override
     public void onStart() {
         super.onStart();
-        if (mHoroscope == null) {
+        if (mIsFirstLoad) {
+            mIsFirstLoad = false;
+            // 从配置中取出保存的星座名
+            String horoscope = Config.getString(Config.KEY_HOROSCOPE, null);
+            if (horoscope != null) {
+                mHoroscopeName = horoscope;
+            }
             initViews();
             doGetHoroscope();
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // 将当前星座保存进配置
+        Config.putString(Config.KEY_HOROSCOPE, mHoroscopeName);
     }
 
     private void changeHoroscope(String name) {
@@ -352,6 +378,24 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         mReloadBtn.setVisibility(View.INVISIBLE);
         mName.setVisibility(View.INVISIBLE);
         mCoverFlow.setVisibility(View.INVISIBLE);
+
+        // 紧凑模式
+        if (mIsSlimMode) {
+            Utils.setViewSize(mBgImg, -1, Utils.getDimen(R.dimen.horoscope_card_img_height_slim));
+            Utils.setViewMargin(getActivity().findViewById(R.id.horoscope_info_container),
+                    Utils.getDimen(R.dimen.horoscope_card_img_height_slim), -1, -1, -1);
+            Utils.setViewSize(mAvatarImg, Utils.getDimen(R.dimen.horoscope_card_avatar_size_slim),
+                    Utils.getDimen(R.dimen.horoscope_card_avatar_size_slim));
+            Utils.setViewMargin(mAvatarImg,
+                    Utils.getDimen(R.dimen.horoscope_card_avatar_margin_top_slim), -1, -1, -1);
+            mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                    Utils.getDimen(R.dimen.horoscope_card_title_size_slim));
+            Utils.setViewMargin(mTitle,
+                    Utils.getDimen(R.dimen.horoscope_card_title_margin_top_slim),
+                    -1, -1,
+                    Utils.getDimen(R.dimen.horoscope_card_title_margin_left_slim));
+            mScrollSelector.setVisibility(View.GONE);
+        }
     }
 
     @Override

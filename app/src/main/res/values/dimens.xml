@@ -23,6 +23,17 @@
     <dimen name="horoscope_card_title_margin_top">161dp</dimen>
     <dimen name="horoscope_card_title_margin_left">10dp</dimen>
     <dimen name="horoscope_cover_flow_height">100dp</dimen>
+    <dimen name="horoscope_card_button_height">45dp</dimen>
+
+    <!-- 紧凑模式 -->
+    <dimen name="horoscope_card_img_height_slim">140dp</dimen>
+    <dimen name="horoscope_card_avatar_size_slim">104dp</dimen>
+    <!-- (horoscope_card_img_height_slim - horoscope_card_avatar_size_slim) / 2 - title gap -->
+    <dimen name="horoscope_card_avatar_margin_top_slim">8dp</dimen>
+    <dimen name="horoscope_card_title_size_slim">20sp</dimen>
+    <!-- horoscope_card_img_height_slim - horoscope_card_title_size_slim - title gap -->
+    <dimen name="horoscope_card_title_margin_top_slim">110dp</dimen>
+    <dimen name="horoscope_card_title_margin_left_slim">10dp</dimen>
 
     <dimen name="horoscope_details_header_height">170dp</dimen>
     <dimen name="horoscope_details_avatar_height">110dp</dimen>

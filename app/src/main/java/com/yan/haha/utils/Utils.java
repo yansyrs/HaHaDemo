@@ -12,6 +12,7 @@ import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
 
 import com.yan.haha.MainApplication;
@@ -191,6 +192,43 @@ public class Utils {
             sendIntent.setType(fileType);
             sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ctx.startActivity(sendIntent);
+        }
+    }
+
+    public static void setViewSize(View view, int width, int height) {
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (width >= 0) {
+            lp.width = width;
+        }
+        if (height >= 0) {
+            lp.height = height;
+        }
+        view.setLayoutParams(lp);
+    }
+
+    public static void setViewMargin(View view, int t, int r, int d, int l) {
+        ViewGroup.MarginLayoutParams mp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        if (t >= 0) {
+            mp.topMargin = t;
+        }
+        if (r >= 0) {
+            mp.rightMargin = r;
+        }
+        if (d >= 0) {
+            mp.bottomMargin = d;
+        }
+        if (l >= 0) {
+            mp.leftMargin = l;
+        }
+        view.setLayoutParams(mp);
+    }
+
+    public static int getDimen(int resId) {
+        Context ctx = MainApplication.getContext();
+        if (ctx != null) {
+            return ctx.getResources().getDimensionPixelSize(resId);
+        } else {
+            return -1;
         }
     }
 }
