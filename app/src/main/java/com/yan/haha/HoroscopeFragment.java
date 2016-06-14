@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -157,14 +158,20 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         mAvatarImg.setImageResource(avatarRes);
         mTitle.setText(String.format("%s今日综合评价", mHoroscopeName));
         mSummary.setText(mHoroscope.getSummary());
-        mCard.setTranslationY(Utils.getScreenHeight());
         mCard.setVisibility(View.VISIBLE);
-        mCard.animate()
-                .translationY(0f)
-                .setDuration(1000)
+
+        ViewPropertyAnimator animator = mCard.animate();
+        animator.setDuration(1000)
                 .setListener(null)
-                .setInterpolator(new DecelerateInterpolator(3f))
-                .start();
+                .setInterpolator(new DecelerateInterpolator(3f));
+        if (mIsSlimMode) {
+            mCard.setAlpha(0f);
+            animator.alpha(1f);
+        } else {
+            mCard.setTranslationY(Utils.getScreenHeight());
+            animator.translationY(0f);
+        }
+        animator.start();
         if (mCoverFlow.getVisibility() == View.INVISIBLE) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -381,19 +388,33 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
 
         // 紧凑模式
         if (mIsSlimMode) {
-            Utils.setViewSize(mBgImg, -1, Utils.getDimen(R.dimen.horoscope_card_img_height_slim));
+            Utils.setViewSize(mBgImg, Utils.SIZE_NOT_CHANGE,
+                    Utils.getDimen(R.dimen.horoscope_card_img_height_slim));
+
             Utils.setViewMargin(getActivity().findViewById(R.id.horoscope_info_container),
-                    Utils.getDimen(R.dimen.horoscope_card_img_height_slim), -1, -1, -1);
+                    Utils.getDimen(R.dimen.horoscope_card_img_height_slim),
+                    Utils.SIZE_NOT_CHANGE, Utils.SIZE_NOT_CHANGE, Utils.SIZE_NOT_CHANGE);
+
             Utils.setViewSize(mAvatarImg, Utils.getDimen(R.dimen.horoscope_card_avatar_size_slim),
                     Utils.getDimen(R.dimen.horoscope_card_avatar_size_slim));
+
             Utils.setViewMargin(mAvatarImg,
-                    Utils.getDimen(R.dimen.horoscope_card_avatar_margin_top_slim), -1, -1, -1);
+                    Utils.getDimen(R.dimen.horoscope_card_avatar_margin_top_slim),
+                    Utils.SIZE_NOT_CHANGE, Utils.SIZE_NOT_CHANGE, Utils.SIZE_NOT_CHANGE);
+
             mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     Utils.getDimen(R.dimen.horoscope_card_title_size_slim));
+
             Utils.setViewMargin(mTitle,
                     Utils.getDimen(R.dimen.horoscope_card_title_margin_top_slim),
-                    -1, -1,
+                    Utils.SIZE_NOT_CHANGE, Utils.SIZE_NOT_CHANGE,
                     Utils.getDimen(R.dimen.horoscope_card_title_margin_left_slim));
+
+            View mainContainer = getActivity().findViewById(R.id.horoscope_container);
+            Utils.setViewSize(mainContainer,
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mainContainer.setPadding(0, 0, 0, 0);
+
             mScrollSelector.setVisibility(View.GONE);
         }
     }

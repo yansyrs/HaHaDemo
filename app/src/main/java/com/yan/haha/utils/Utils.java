@@ -25,6 +25,8 @@ public class Utils {
 
     public static final String FILE_TYPE_IMAGE = "image/*";
 
+    public static final int SIZE_NOT_CHANGE = -255;
+
     public static int getScreenHeight() {
         Context context = MainApplication.getContext();
         if (context != null) {
@@ -197,10 +199,10 @@ public class Utils {
 
     public static void setViewSize(View view, int width, int height) {
         ViewGroup.LayoutParams lp = view.getLayoutParams();
-        if (width >= 0) {
+        if (width != SIZE_NOT_CHANGE) {
             lp.width = width;
         }
-        if (height >= 0) {
+        if (height != SIZE_NOT_CHANGE) {
             lp.height = height;
         }
         view.setLayoutParams(lp);
@@ -208,16 +210,16 @@ public class Utils {
 
     public static void setViewMargin(View view, int t, int r, int d, int l) {
         ViewGroup.MarginLayoutParams mp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        if (t >= 0) {
+        if (t != SIZE_NOT_CHANGE) {
             mp.topMargin = t;
         }
-        if (r >= 0) {
+        if (r != SIZE_NOT_CHANGE) {
             mp.rightMargin = r;
         }
-        if (d >= 0) {
+        if (d != SIZE_NOT_CHANGE) {
             mp.bottomMargin = d;
         }
-        if (l >= 0) {
+        if (l != SIZE_NOT_CHANGE) {
             mp.leftMargin = l;
         }
         view.setLayoutParams(mp);
