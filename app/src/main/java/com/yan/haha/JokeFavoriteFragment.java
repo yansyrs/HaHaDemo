@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,6 +43,7 @@ public class JokeFavoriteFragment extends ContentFragment{
     public static final String TABLE_NAME = "Jokes";
     private static final String CRLF_REPLACE = ".crlf0.0";
     private static final String TAG = "JokeFavoriteFragment";
+    private static final String ACTION_DELETE = "delete";
     private ActionBarDrawerToggle toggle;
 
 
@@ -71,6 +73,26 @@ public class JokeFavoriteFragment extends ContentFragment{
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         mJokeList.setLayoutManager(lm);
         mJokeList.setAdapter(mAdapter);
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        //Remove swiped item from list and notify the RecyclerView
+                        mAdapter.deleteOrInsertItemFromDB(viewHolder.getAdapterPosition(),ACTION_DELETE);
+                        mAdapter.deleteItem(viewHolder.getAdapterPosition(),null,false);
+                        mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                    }
+
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+                };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(mJokeList);
+
         getJokeFromDb();
         Log.d(TAG,"jokeFavoriteFragment onStart");
     }
