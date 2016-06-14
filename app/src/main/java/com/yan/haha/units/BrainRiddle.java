@@ -6,12 +6,18 @@ public class BrainRiddle {
     private String id;
     private String question;
     private String answer;
+    private boolean favorite;
 
-    public BrainRiddle(String id, String question, String answer) {
+    public BrainRiddle(String id, String question, String answer, boolean favorite) {
         super();
         this.id = id;
         this.question = question;
         this.answer = answer;
+        this.favorite = favorite;
+    }
+
+    public BrainRiddle(String id, String question, String answer) {
+        this(id, question, answer, false);
     }
 
     public String getId() {
@@ -36,5 +42,13 @@ public class BrainRiddle {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
     }
 }

@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yan.haha.R;
+import com.yan.haha.utils.RiddleDb;
 import com.yan.haha.utils.Utils;
 import com.yan.haha.units.BrainRiddle;
 
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.ViewHolder> {
     private ArrayList<BrainRiddle> mBrainData = new ArrayList<BrainRiddle>();
     private ArrayList<ViewHolder> mHolderList = new ArrayList<ViewHolder>();
+
+    private boolean mIsFavoriteMode = false;
 
     private static final int CIRCULAR_REVEAL_DURATION = 500;
     private static final int RUN_UP_ANI_DURATION = 700;
@@ -49,16 +53,42 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
     }
 
     public BrainRiddleAdapter() {
-        super();
+        this(null, false);
     }
 
     public BrainRiddleAdapter(ArrayList<BrainRiddle> brainList) {
-        this();
-        mBrainData = brainList;
+        this(brainList, false);
     }
 
-    public void setBrainDataList(ArrayList<BrainRiddle> brainList) {
+    public BrainRiddleAdapter(ArrayList<BrainRiddle> brainList, boolean favoriteMode) {
+        super();
         mBrainData = brainList;
+        mIsFavoriteMode = favoriteMode;
+        setFavoriteState();
+    }
+
+    public void setBrainDataList(ArrayList<BrainRiddle> brainList, boolean favoriteMode) {
+        mBrainData = brainList;
+        mIsFavoriteMode = favoriteMode;
+        setFavoriteState();
+    }
+
+    private void setFavoriteState() {
+        if (!mIsFavoriteMode && mBrainData != null) {
+            // 非收藏夹下，先查询数据库判断列表内的脑筋急转弯项是否已收藏
+            RiddleDb db = RiddleDb.getInstance();
+            if (db != null) {
+                db.openDatabase();
+                for (BrainRiddle riddle : mBrainData) {
+                    if (db.isRiddleSaved(riddle.getId())) {
+                        riddle.setFavorite(true);
+                    } else {
+                        riddle.setFavorite(false);
+                    }
+                }
+                db.closeDatabase();
+            }
+        }
     }
 
     @Override
@@ -190,6 +220,14 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         }
     }
 
+    private void onBtnShareClick(int position) {
+        Utils.share(mBrainData.get(position).getQuestion());
+    }
+
+    private void onBtnFavoriteClick(ImageView view, int position) {
+
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         ViewGroup container = holder.mLayoutView;
@@ -201,6 +239,8 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         View unexpandView = container.findViewById(R.id.brain_riddle_unexpanded);
         View expandView = container.findViewById(R.id.brain_riddle_expanded);
         View sep = container.findViewById(R.id.brain_riddle_sep);
+        ImageView share = (ImageView) container.findViewById(R.id.brain_riddle_share);
+        ImageView favorite = (ImageView) container.findViewById(R.id.brain_riddle_save);
 
         if (mBrainData.get(position) == null) {
             unexpandView.setVisibility(View.GONE);
@@ -225,10 +265,25 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         // 恢复删除 item 时用到的 tran x
         container.setTranslationX(0);
 
+        // 设置菜单项点击事件
         container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onMenuItemClick(view, position);
+            }
+        });
+
+        // 设置按钮点击事件
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBtnShareClick(position);
+            }
+        });
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBtnFavoriteClick((ImageView) v, position);
             }
         });
 

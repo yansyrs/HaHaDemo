@@ -9,7 +9,7 @@
 
     <dimen name="brain_riddle_icon">32dp</dimen>
     <dimen name="brain_riddle_answer_icon">32dp</dimen>
-    <dimen name="brain_riddle_save_icon">24dp</dimen>
+    <dimen name="brain_riddle_button_size">24dp</dimen>
 
     <dimen name="fab_half_size">28dp</dimen>
     <dimen name="fab_half_size_margin_top">-28dp</dimen>

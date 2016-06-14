@@ -86,7 +86,7 @@ public class BrainRiddleFragment extends ContentFragment implements OnDataFinish
                         } else if (mLoadState != LoadingState.IDLE){
                             // 网络请求成功，加载数据到列表
                             if (mLoadState == LoadingState.LOAD_SUCCESS) {
-                                mAdapter.setBrainDataList(mRiddleData);
+                                mAdapter.setBrainDataList(mRiddleData, false);
                                 //mAdapter.notifyDataSetChanged();
                                 mBrainRiddleList.scrollToPosition(0);
                                 mAdapter.refresh();
