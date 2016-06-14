@@ -53,6 +53,7 @@
                     android:text="双鱼座今日综合评价" />
 
                 <RelativeLayout
+                    android:id="@+id/horoscope_info_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/horoscope_card_img_height" >
@@ -61,7 +62,12 @@
                         android:id="@+id/horoscope_summary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="3dp"
                         android:text="这段时间里对自己的工作相当聚焦，只要一心一意对待就能有不错的效率，今天也是特别适合你学习的一天，看看业务知识是否已经有些淡忘，学习考试的狮子也请加油吧。" />
 
                     <Button
@@ -69,7 +75,8 @@
                         android:layout_below="@id/horoscope_summary"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/horoscope_card_button_height"
+                        android:layout_marginTop="-5dp"
                         android:text="@string/share"
                         android:textColor="@color/text_gray" />
 
@@ -79,14 +86,16 @@
                         android:layout_toRightOf="@id/horoscope_share"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/horoscope_card_button_height"
+                        android:layout_marginTop="-5dp"
                         android:text="@string/more"
                         android:textColor="@color/colorAccent" />
 
                     <TextView
                         android:id="@+id/horoscope_date"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/horoscope_card_button_height"
+                        android:layout_marginTop="-5dp"
                         android:layout_below="@id/horoscope_summary"
                         style="?android:attr/buttonBarButtonStyle"
                         android:textColor="@color/text_gray"

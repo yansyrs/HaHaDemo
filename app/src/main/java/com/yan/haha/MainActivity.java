@@ -106,10 +106,12 @@ public class MainActivity extends AppCompatActivity
             setTitle(getString(R.string.jokes));
         } else if (id == R.id.nav_horoscope) {
             // 星座
-            replaceContentFragment(new HoroscopeFragment(),false);
+            HoroscopeFragment horoscope = new HoroscopeFragment();
+            //horoscope.setSlimMode(true);
+            replaceContentFragment(horoscope,false);
             setTitle(getString(R.string.horoscope));
         } else if (id == R.id.nav_manage) {
-
+            
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
