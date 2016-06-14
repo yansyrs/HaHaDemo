@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
             replaceContentFragment(horoscope,false);
             setTitle(getString(R.string.horoscope));
         } else if (id == R.id.nav_manage) {
-            
+
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
