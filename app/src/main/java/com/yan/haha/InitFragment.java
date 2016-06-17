@@ -38,7 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class InitFragment extends ContentFragment{
+public class InitFragment extends ContentFragment implements View.OnClickListener{
     private static final String TAG = "InitFragment";
     private static int REQUEST_PAGE = 1;
     private int jokeNum = 1;
@@ -133,68 +133,47 @@ public class InitFragment extends ContentFragment{
         mHoroscopeDate.setEnabled(false);
         Date date = new Date(System.currentTimeMillis());
         mHoroscopeDate.setText(DateFormat.getLongDateFormat(getActivity()).format(date));
-        mHoroscopeCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mHoroscopeCardView.setOnClickListener(this);
+        mHoroscopeMoreButton.setOnClickListener(this);
+        mHoroscopeShareButton.setOnClickListener(this);
+        mBrainRiddleCardView.setOnClickListener(this);
+        mBrainRiddleMoreButton.setOnClickListener(this);
+        mBrainRiddleShareButton.setOnClickListener(this);
+        mJokeCardView.setOnClickListener(this);
+        mJokeMoreButton.setOnClickListener(this);
+        mJokeShareButton.setOnClickListener(this);
+
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.horoscope_card:
+            case R.id.horoscope_more:
                 MainActivity.getInstance().replaceContentFragment(new HoroscopeFragment(),true);
                 MainActivity.getInstance().setTitle(getString(R.string.horoscope));
-            }
-        });
-        mHoroscopeMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.getInstance().replaceContentFragment(new HoroscopeFragment(),true);
-                MainActivity.getInstance().setTitle(getString(R.string.horoscope));
-            }
-        });
-        mHoroscopeShareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.horoscope_share:
                 shareHoroscope();
-            }
-        });
-        mBrainRiddleCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mBrainRiddleTextView.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.alpha));
-                mBrainRiddleTextView.setText(mRiddleData.get(0).getAnswer());
-            }
-        });
-        mBrainRiddleMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.riddle_card:
+            case R.id.riddle_more:
                 MainActivity.getInstance().replaceContentFragment(new BrainRiddleFragment(),true);
                 MainActivity.getInstance().setTitle(getString(R.string.brain_riddles));
-            }
-        });
-        mBrainRiddleShareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.riddle_share:
                 Utils.share(getActivity(),mRiddleData.get(0).getQuestion());
-            }
-        });
-        mJokeCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.joke_card:
+            case R.id.joke_more:
                 MainActivity.getInstance().replaceContentFragment(new JokeFragment(),true);
                 MainActivity.getInstance().setTitle(getString(R.string.jokes));
-            }
-        });
-        mJokeMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.getInstance().replaceContentFragment(new JokeFragment(),true);
-                MainActivity.getInstance().setTitle(getString(R.string.jokes));
-            }
-        });
-
-        mJokeShareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.joke_share:
                 Utils.share(getActivity(),mJokeData.get(0).getBody());
-            }
-        });
-
+                break;
+            default:
+                break;
+        }
     }
 
     private GetJoke getJokeProcess() {
