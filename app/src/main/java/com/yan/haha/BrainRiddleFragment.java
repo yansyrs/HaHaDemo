@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class BrainRiddleFragment extends ContentFragment implements OnDataFinishedListener {
     private RecyclerView mBrainRiddleList = null;
-    private BrainRiddleAdapter mAdapter = new BrainRiddleAdapter();
+    private BrainRiddleAdapter mAdapter = new BrainRiddleAdapter(MainActivity.getInstance());
     private ArrayList<BrainRiddle> mRiddleData = new ArrayList<BrainRiddle>();
 
     private final static int RANDOM_COUNT = 15;//10;

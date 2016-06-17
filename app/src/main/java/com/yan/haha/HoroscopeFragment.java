@@ -71,7 +71,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
 
     private final static int MSG_ID_CHANGE_HOROSCOPE = 0;
 
-    private static int PERMISSION_REQ_CODE = 0;
+    public static int PERMISSION_REQ_CODE = 0;
     private View mPermissionView = null;
 
     private enum LoadState {

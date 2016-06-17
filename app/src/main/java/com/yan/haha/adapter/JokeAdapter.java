@@ -313,7 +313,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> im
             share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.share(mJokeData.get(position).getBody());
+                    Utils.share(mContext,mJokeData.get(position).getBody());
                 }
             });
 

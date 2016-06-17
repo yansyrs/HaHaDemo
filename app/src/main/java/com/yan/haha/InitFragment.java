@@ -1,17 +1,28 @@
 package com.yan.haha;
 
+import android.Manifest;
 import android.animation.Animator;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yan.haha.adapter.BrainRiddleAdapter;
 import com.yan.haha.units.BrainRiddle;
 import com.yan.haha.units.Horoscope;
 import com.yan.haha.units.HoroscopeInfo;
@@ -21,7 +32,9 @@ import com.yan.haha.utils.GetHoroscope;
 import com.yan.haha.utils.GetJoke;
 import com.yan.haha.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -55,6 +68,13 @@ public class InitFragment extends ContentFragment{
     private TextView mHoroscopeTitle = null;
     private TextView mHoroscopeSummary = null;
     private TextView mHoroscopeDate = null;
+    private Button mJokeMoreButton = null;
+    private Button mJokeShareButton = null;
+    private Button mHoroscopeMoreButton = null;
+    private Button mHoroscopeShareButton = null;
+    private Button mBrainRiddleMoreButton = null;
+    private Button mBrainRiddleShareButton = null;
+    private View mPermissionView = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,10 +108,10 @@ public class InitFragment extends ContentFragment{
 
     }
 
-
     private void initViews() {
         mJokeCardView = (CardView) getActivity().findViewById(R.id.joke_card);
         mHoroscopeCardView = (CardView) getActivity().findViewById(R.id.horoscope_card);
+        mBrainRiddleCardView = (CardView) getActivity().findViewById(R.id.riddle_card);
         mHoroscopeBgImg = (ImageView) getActivity().findViewById(R.id.horoscope_bg);
         mHoroscopeAvatarImg = (ImageView) getActivity().findViewById(R.id.horoscope_avatar);
         mHoroscopeTitle = (TextView) getActivity().findViewById(R.id.horoscope_title);
@@ -103,14 +123,75 @@ public class InitFragment extends ContentFragment{
         mBrainRiddleContentLoadingImg = (ImageView) getActivity().findViewById(R.id.riddle_loading);
         mHoroscopeContentLoadingImg = (ImageView) getActivity().findViewById(R.id.horoscope_loading) ;
         mHoroscopeDate = (TextView) getActivity().findViewById(R.id.horoscope_date);
+        mJokeMoreButton = (Button) getActivity().findViewById(R.id.joke_more);
+        mJokeShareButton = (Button) getActivity().findViewById(R.id.joke_share);
+        mHoroscopeMoreButton = (Button) getActivity().findViewById(R.id.horoscope_more);
+        mHoroscopeShareButton = (Button) getActivity().findViewById(R.id.horoscope_share);
+        mBrainRiddleMoreButton = (Button) getActivity().findViewById(R.id.riddle_more);
+        mBrainRiddleShareButton = (Button) getActivity().findViewById(R.id.riddle_share);
 
         mHoroscopeDate.setEnabled(false);
         Date date = new Date(System.currentTimeMillis());
         mHoroscopeDate.setText(DateFormat.getLongDateFormat(getActivity()).format(date));
+        mHoroscopeCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.getInstance().replaceContentFragment(new HoroscopeFragment(),true);
+                MainActivity.getInstance().setTitle(getString(R.string.horoscope));
+            }
+        });
+        mHoroscopeMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.getInstance().replaceContentFragment(new HoroscopeFragment(),true);
+                MainActivity.getInstance().setTitle(getString(R.string.horoscope));
+            }
+        });
+        mHoroscopeShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareHoroscope();
+            }
+        });
+        mBrainRiddleCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBrainRiddleTextView.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.alpha));
+                mBrainRiddleTextView.setText(mRiddleData.get(0).getAnswer());
+            }
+        });
+        mBrainRiddleMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.getInstance().replaceContentFragment(new BrainRiddleFragment(),true);
+                MainActivity.getInstance().setTitle(getString(R.string.brain_riddles));
+            }
+        });
+        mBrainRiddleShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.share(getActivity(),mRiddleData.get(0).getQuestion());
+            }
+        });
         mJokeCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.getInstance().replaceContentFragment(new JokeFragment(),true);
+                MainActivity.getInstance().setTitle(getString(R.string.jokes));
+            }
+        });
+        mJokeMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.getInstance().replaceContentFragment(new JokeFragment(),true);
+                MainActivity.getInstance().setTitle(getString(R.string.jokes));
+            }
+        });
+
+        mJokeShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.share(getActivity(),mJokeData.get(0).getBody());
             }
         });
 
@@ -293,7 +374,7 @@ public class InitFragment extends ContentFragment{
                         } else if (mHoroscopeLoadState != LoadingState.IDLE){
                             if (mHoroscopeLoadState == LoadingState.LOAD_SUCCESS) {
                                 // 网络请求成功
-                                doGetHoroscopeSuccessfully();
+                                showHoroscopeCard();
                             } else if (mHoroscopeLoadState == LoadingState.LOAD_FAIL){
                                 // 网络请求失败
                                 mLoadingView.setVisibility(View.INVISIBLE);
@@ -309,12 +390,8 @@ public class InitFragment extends ContentFragment{
                 .start();
     }
 
-    private void doGetHoroscopeSuccessfully() {
-        mHoroscopeContentLoadingImg.setVisibility(View.INVISIBLE);
-        showHoroscopeCard();
-    }
-
     private void showHoroscopeCard() {
+        mHoroscopeContentLoadingImg.setVisibility(View.INVISIBLE);
         int bgNum = Utils.getRandomNumber(1, 4);
         int avatarNum = Utils.getRandomNumber(1, 2);
         String name = HoroscopeInfo.getLatinName(mHoroscopeName);
@@ -340,12 +417,81 @@ public class InitFragment extends ContentFragment{
         animator.start();
     }
 
-    private HoroscopeInfo getHoroscopeInfo(String name) {
-        for (int i = 0; i < HoroscopeFragment.mHoroscopeList.size(); i++) {
-            if (HoroscopeFragment.mHoroscopeList.get(i).getName().equals(name)) {
-                return HoroscopeFragment.mHoroscopeList.get(i);
-            }
+    /*
+    申请外部存储读写权限
+    */
+    private boolean checkPermissionBeforeClick(String permission, View view) {
+        if (ContextCompat.checkSelfPermission(getActivity(), permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(getActivity(), new String[]{permission},
+                    HoroscopeFragment.PERMISSION_REQ_CODE);
+            mPermissionView = view;
+            return false;
         }
-        return null;
+        return true;
     }
+
+    private void shareHoroscope() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!checkPermissionBeforeClick(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, mHoroscopeShareButton)) {
+                // 无权限，需要先授权
+                return;
+            }
+
+            // 先创建目录
+            final String dir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/Pictures/Haha/Horoscope/";
+            File dirFile = new File(dir);
+            if (!dirFile.exists()) {
+                dirFile.mkdirs();
+            }
+
+            // 以星座及时间为文件名
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int min = calendar.get(Calendar.MINUTE);
+            int sec = calendar.get(Calendar.SECOND);
+            final String fileName = String.format("%s_summary_%d%d%d%d%d%d.png",
+                    HoroscopeInfo.getLatinName(mHoroscopeName),
+                    year, month, day, hour, min, sec);
+
+            // 将 view 保存为图片
+            Utils.saveViewAsPicture(mHoroscopeCardView, dir + fileName,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            // 保存成功，启动分享功能
+                            Utils.share(new File(dir + fileName), Utils.FILE_TYPE_IMAGE);
+                        }
+                    }, null);
+        }
+    }
+
+    private void expandView(final View view, int width, int height) {
+        if (Build.VERSION.SDK_INT >= 21 && view.isAttachedToWindow()) {
+            Animator anim = ViewAnimationUtils.createCircularReveal(
+                    view, width / 2, height / 2, 0, width);
+            anim.setDuration(BrainRiddleAdapter.CIRCULAR_REVEAL_DURATION);
+            anim.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                public void onAnimationEnd(Animator animation) {}
+                public void onAnimationCancel(Animator animation) {}
+                public void onAnimationRepeat(Animator animation) {}
+            });
+            anim.start();
+        } else {
+            view.setVisibility(View.VISIBLE);
+        }
+    }
+
 }
