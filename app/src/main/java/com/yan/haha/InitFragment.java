@@ -3,11 +3,14 @@ package com.yan.haha;
 import android.Manifest;
 import android.animation.Animator;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -129,7 +132,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         mHoroscopeShareButton = (Button) getActivity().findViewById(R.id.horoscope_share);
         mBrainRiddleMoreButton = (Button) getActivity().findViewById(R.id.riddle_more);
         mBrainRiddleShareButton = (Button) getActivity().findViewById(R.id.riddle_share);
-
+        setHoroscopeCardView();
         mHoroscopeDate.setEnabled(false);
         Date date = new Date(System.currentTimeMillis());
         mHoroscopeDate.setText(DateFormat.getLongDateFormat(getActivity()).format(date));
@@ -173,6 +176,35 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                 break;
             default:
                 break;
+        }
+    }
+
+    public void setHoroscopeCardView() {
+        int bgNum = Utils.getRandomNumber(1, 4);
+        int avatarNum = Utils.getRandomNumber(1, 2);
+        String name = HoroscopeInfo.getLatinName(mHoroscopeName);
+        int bgRes = Utils.getResourceIdByName(
+                "horoscope_bg_" + bgNum,
+                "drawable");
+        int avatarRes = Utils.getResourceIdByName(
+                "ic_horoscope_" + name + "_" + avatarNum,
+                "drawable");
+        mHoroscopeBgImg.setImageResource(bgRes);
+        mHoroscopeAvatarImg.setImageResource(avatarRes);
+
+        Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(getActivity(), bgRes)).getBitmap();
+        if (bitmap != null) {
+            Utils.getBitmapColor(bitmap, new Utils.BitmapColorCallback(){
+                @Override
+                public void onGenerated(Palette palette) {
+                    Palette.Swatch swatchLight = palette.getLightMutedSwatch();
+
+                    if (swatchLight != null) {
+                        mHoroscopeCardView.setCardBackgroundColor(swatchLight.getRgb());
+                    }
+
+                }
+            });
         }
     }
 
@@ -371,17 +403,6 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
 
     private void showHoroscopeCard() {
         mHoroscopeContentLoadingImg.setVisibility(View.INVISIBLE);
-        int bgNum = Utils.getRandomNumber(1, 4);
-        int avatarNum = Utils.getRandomNumber(1, 2);
-        String name = HoroscopeInfo.getLatinName(mHoroscopeName);
-        int bgRes = Utils.getResourceIdByName(
-                "horoscope_bg_" + bgNum,
-                "drawable");
-        int avatarRes = Utils.getResourceIdByName(
-                "ic_horoscope_" + name + "_" + avatarNum,
-                "drawable");
-        mHoroscopeBgImg.setImageResource(bgRes);
-        mHoroscopeAvatarImg.setImageResource(avatarRes);
         mHoroscopeTitle.setText(String.format("%s今日综合评价", mHoroscopeName));
         mHoroscopeSummary.setText(mHoroscope.getSummary());
         mHoroscopeCardView.setVisibility(View.VISIBLE);

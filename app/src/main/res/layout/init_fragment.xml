@@ -101,8 +101,8 @@
                         android:layout_marginTop="-5dp"
                         android:layout_below="@id/horoscope_summary"
                         style="?android:attr/buttonBarButtonStyle"
-                        android:textColor="@color/text_gray"
                         android:layout_alignParentRight="true"
+                        android:textColor="@color/material_grey"
                         android:text="2016.06.01" />
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
