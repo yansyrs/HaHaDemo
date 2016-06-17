@@ -78,7 +78,7 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
         IDLE, LOADING, LOAD_SUCCESS, LOAD_FAIL
     }
 
-    private ArrayList<HoroscopeInfo> mHoroscopeList = new ArrayList<HoroscopeInfo>(){
+    public static ArrayList<HoroscopeInfo> mHoroscopeList = new ArrayList<HoroscopeInfo>(){
         {
             add(new HoroscopeInfo("水瓶座", "01.21~02.19"));
             add(new HoroscopeInfo("双鱼座", "02.20~03.20"));

@@ -33,6 +33,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     private ArrayList<Jokes> mJokeData = new ArrayList<Jokes>();
 
     private static int REQUEST_PAGE = 1;
+    private int jokeNum = 10;
     private GetJoke mJokeRequest = null;
 
     private ImageView mContentLoadingImg = null;
@@ -238,7 +239,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     }
 
     private GetJoke getJokeProcess() {
-        GetJoke process = new GetJoke(REQUEST_PAGE);
+        GetJoke process = new GetJoke(REQUEST_PAGE, jokeNum);
         process.setOnDataFinishedListener(this);
         return process;
     }
