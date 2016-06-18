@@ -20,6 +20,7 @@
     <color name="material_teal">#009688</color>
     <color name="material_green">#259B24</color>
     <color name="material_light_green">#8BC34A</color>
+    <color name="material_light_green_light">#DCEDC8</color>
     <color name="material_lime">#CDDC39</color>
     <color name="material_yellow">#FFEB3B</color>
     <color name="material_light_yellow">#FFFAE3</color>
@@ -29,7 +30,7 @@
     <color name="material_brown">#795548</color>
     <color name="material_grey">#9E9E9E</color>
     <color name="material_blue_grey">#607D8B</color>
-
+    
     <color name="brain_riddle_list_bg">#E9E9E9</color>
     <color name="brain_riddle_list_item_expanded">#384248</color>
 

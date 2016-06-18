@@ -17,6 +17,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yan.haha.MainApplication;
 import com.yan.haha.R;
 import com.yan.haha.utils.RiddleDb;
 import com.yan.haha.utils.Utils;
@@ -32,7 +33,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
 
     private boolean mIsFavoriteMode = false;
 
-    private static final int CIRCULAR_REVEAL_DURATION = 500;
+    public static final int CIRCULAR_REVEAL_DURATION = 500;
     private static final int RUN_UP_ANI_DURATION = 700;
     private static final int RUN_UP_ANI_TIME_GAP = 200;
 
@@ -47,6 +48,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
 
     private View mPreExpandedView = null;
     private int mCurrExpandedPosition = -1;
+    protected Context mContext;
 
     private AppBarFavoriteUpdater mAppBarUpdater = null;
 
@@ -238,7 +240,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
     }
 
     private void onBtnShareClick(int position) {
-        Utils.share(mBrainData.get(position).getQuestion());
+        Utils.share(mContext, mBrainData.get(position).getQuestion());
     }
 
     private void doBtnFavoriteClicked(ImageView view, int position) {

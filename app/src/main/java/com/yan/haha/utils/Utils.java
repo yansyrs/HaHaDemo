@@ -174,15 +174,13 @@ public class Utils {
         task.execute();
     }
 
-    public static void share(String text) {
-        Context ctx = MainApplication.getContext();
-        if (ctx != null) {
+    public static void share(Context context, String text) {
+        if (context != null) {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, text);
             sendIntent.setType("text/plain");
-            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ctx.startActivity(sendIntent);
+            context.startActivity(sendIntent);
         }
     }
 
