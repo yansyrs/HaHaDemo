@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.yan.haha.MainApplication;
 import com.yan.haha.units.BrainRiddle;
+
+import java.util.ArrayList;
 
 public class RiddleDb {
     private static RiddleDb mInstance = null;
@@ -27,14 +30,14 @@ public class RiddleDb {
                     " question text, answer text)";
             mDatabase = context.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
             mDatabase.execSQL(sql);
-            mDatabase.close();
+            closeDatabase();
         }
         return mInstance;
     }
 
     public static void openDatabase() {
         Context context = MainApplication.getContext();
-        if (mDatabase == null && context != null) {
+        if ((mDatabase == null || !mDatabase.isOpen()) && context != null) {
             mDatabase = context.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
         }
     }
@@ -46,11 +49,11 @@ public class RiddleDb {
         }
     }
 
-    private static boolean isDatabaseOpened() {
+    private boolean isDatabaseOpened() {
         return (mDatabase != null && mDatabase.isOpen());
     }
 
-    public static BrainRiddle getRiddle(String id) {
+    public BrainRiddle getRiddle(String id) {
         if (!isDatabaseOpened()) {
             return null;
         }
@@ -67,11 +70,11 @@ public class RiddleDb {
         return riddle;
     }
 
-    public static boolean isRiddleSaved(String id) {
+    public boolean isRiddleSaved(String id) {
         return (getRiddle(id) != null);
     }
 
-    public static void saveRiddle(String id, String question, String answer) {
+    public void saveRiddle(String id, String question, String answer) {
         if (!isDatabaseOpened()) {
             return;
         }
@@ -86,14 +89,39 @@ public class RiddleDb {
         }
     }
 
-    public static void saveRiddle(BrainRiddle riddle) {
-        saveRiddle(riddle.getId(), riddle.getQuestion(), riddle.getAnswer());
+    public void saveRiddle(BrainRiddle riddle) {
+        if (riddle != null) {
+            saveRiddle(riddle.getId(), riddle.getQuestion(), riddle.getAnswer());
+        }
     }
 
-    public static void deleteRiddle(String id) {
+    public void deleteRiddle(String id) {
         if (!isDatabaseOpened()) {
             return;
         }
         mDatabase.delete(TABLE_NAME, "id=?", new String[]{id});
+    }
+
+    public void deleteRiddle(BrainRiddle riddle) {
+        if (riddle != null) {
+            deleteRiddle(riddle.getId());
+        }
+    }
+
+    public ArrayList<BrainRiddle> getSavedRiddles() {
+        ArrayList<BrainRiddle> list = new ArrayList<BrainRiddle>();
+        if (!isDatabaseOpened()) {
+            return list;
+        }
+        String sql = "SELECT * FROM " + TABLE_NAME;
+            Cursor cursor = mDatabase.rawQuery(sql, null);
+        while(cursor.moveToNext()) {
+            String id = cursor.getString(cursor.getColumnIndex("id"));
+            String question = cursor.getString(cursor.getColumnIndex("question"));
+            String answer = cursor.getString(cursor.getColumnIndex("answer"));
+            list.add(new BrainRiddle(id, question, answer));
+        }
+        cursor.close();
+        return list;
     }
 }

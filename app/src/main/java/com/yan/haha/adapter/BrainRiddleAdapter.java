@@ -1,9 +1,12 @@
 package com.yan.haha.adapter;
 
 import android.animation.Animator;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +25,8 @@ import com.yan.haha.units.BrainRiddle;
 import java.util.ArrayList;
 
 public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.ViewHolder> {
+    private Context mContext = null;
+
     private ArrayList<BrainRiddle> mBrainData = new ArrayList<BrainRiddle>();
     private ArrayList<ViewHolder> mHolderList = new ArrayList<ViewHolder>();
 
@@ -43,6 +48,12 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
     private View mPreExpandedView = null;
     private int mCurrExpandedPosition = -1;
 
+    private AppBarFavoriteUpdater mAppBarUpdater = null;
+
+    public interface AppBarFavoriteUpdater {
+        public void onAppBarFavoriteUpdate();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ViewGroup mLayoutView = null;
 
@@ -52,16 +63,17 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         }
     }
 
-    public BrainRiddleAdapter() {
-        this(null, false);
+    public BrainRiddleAdapter(Context context) {
+        this(context, null, false);
     }
 
-    public BrainRiddleAdapter(ArrayList<BrainRiddle> brainList) {
-        this(brainList, false);
+    public BrainRiddleAdapter(Context context, ArrayList<BrainRiddle> brainList) {
+        this(context, brainList, false);
     }
 
-    public BrainRiddleAdapter(ArrayList<BrainRiddle> brainList, boolean favoriteMode) {
+    public BrainRiddleAdapter(Context context, ArrayList<BrainRiddle> brainList, boolean favoriteMode) {
         super();
+        mContext = context;
         mBrainData = brainList;
         mIsFavoriteMode = favoriteMode;
         setFavoriteState();
@@ -89,6 +101,10 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
                 db.closeDatabase();
             }
         }
+    }
+
+    public void setOnAppBarFavoriteUpdater(AppBarFavoriteUpdater updater) {
+        mAppBarUpdater = updater;
     }
 
     @Override
@@ -144,6 +160,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         mCurrExpandedPosition = -1;
+                        mPreExpandedView = null;
                         notifyDataSetChanged();
                         if (finishCallback != null) {
                             finishCallback.run();
@@ -224,8 +241,48 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         Utils.share(mBrainData.get(position).getQuestion());
     }
 
-    private void onBtnFavoriteClick(ImageView view, int position) {
+    private void doBtnFavoriteClicked(ImageView view, int position) {
+        boolean isNowFavorite = mBrainData.get(position).isFavorite();
+        RiddleDb db = RiddleDb.getInstance();
+        db.openDatabase();
+        if (isNowFavorite) {
+            db.deleteRiddle(mBrainData.get(position));
+            if (mIsFavoriteMode) {
+                deleteItem(position, null);
+            } else {
+                view.setImageResource(R.drawable.ic_favorite_white);
+            }
+            mBrainData.get(position).setFavorite(false);
+        } else {
+            Log.i("yan", "saveRiddle");
+            db.saveRiddle(mBrainData.get(position));
+            view.setImageResource(R.drawable.ic_favorite_red);
+            mBrainData.get(position).setFavorite(true);
+        }
+        if (mAppBarUpdater != null) {
+            mAppBarUpdater.onAppBarFavoriteUpdate();
+        }
+        db.closeDatabase();
+    }
 
+    private void onBtnFavoriteClick(final ImageView view, final int position) {
+        boolean isNowFavorite = mBrainData.get(position).isFavorite();
+        if (isNowFavorite && mIsFavoriteMode) {
+            new AlertDialog.Builder(mContext)
+                    .setTitle(R.string.brain_riddles)
+                    .setMessage(R.string.unfavorite_confirm)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            doBtnFavoriteClicked(view, position);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create()
+                    .show();
+        } else {
+            doBtnFavoriteClicked(view, position);
+        }
     }
 
     @Override
@@ -260,6 +317,9 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
             question.setText(mBrainData.get(position).getQuestion());
             answer.setText(mBrainData.get(position).getAnswer());
             answer2.setText(mBrainData.get(position).getAnswer());
+
+            favorite.setImageResource(mBrainData.get(position).isFavorite()
+                    ? R.drawable.ic_favorite_red : R.drawable.ic_favorite_white);
         }
 
         // 恢复删除 item 时用到的 tran x

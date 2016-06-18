@@ -130,6 +130,7 @@ public class Utils {
 
                 // 通知各应用刷新文件
                 scanFileForUpdate(new File(path));
+                Log.i("yan", "saveViewAsPicture sucessfully");
                 return true;
             } catch (Exception e) {
                 Log.i("yan", "saveViewAsPicture error: " + e.getMessage());

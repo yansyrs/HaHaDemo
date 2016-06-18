@@ -29,4 +29,5 @@
     <string name="author">Author</string>
     <string name="job">Job</string>
 
+    <string name="unfavorite_confirm">Unfavorite this item?</string>
 </resources>

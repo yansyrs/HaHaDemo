@@ -456,38 +456,38 @@ public class HoroscopeFragment extends ContentFragment implements OnDataFinished
                 // 无权限，需要先授权
                 return;
             }
-
-            // 先创建目录
-            final String dir = Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + "/Pictures/Haha/Horoscope/";
-            File dirFile = new File(dir);
-            if (!dirFile.exists()) {
-                dirFile.mkdirs();
-            }
-
-            // 以星座及时间为文件名
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int min = calendar.get(Calendar.MINUTE);
-            int sec = calendar.get(Calendar.SECOND);
-            final String fileName = String.format("%s_summary_%d%d%d%d%d%d.png",
-                    HoroscopeInfo.getLatinName(mHoroscopeName),
-                    year, month, day, hour, min, sec);
-
-            // 将 view 保存为图片
-            Utils.saveViewAsPicture(mCard, dir + fileName,
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            // 保存成功，启动分享功能
-                            Utils.share(new File(dir + fileName), Utils.FILE_TYPE_IMAGE);
-                        }
-                    }, null);
         }
+
+        // 先创建目录
+        final String dir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/Pictures/Haha/Horoscope/";
+        File dirFile = new File(dir);
+        if (!dirFile.exists()) {
+            dirFile.mkdirs();
+        }
+
+        // 以星座及时间为文件名
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        int sec = calendar.get(Calendar.SECOND);
+        final String fileName = String.format("%s_summary_%d%d%d%d%d%d.png",
+                HoroscopeInfo.getLatinName(mHoroscopeName),
+                year, month, day, hour, min, sec);
+
+        // 将 view 保存为图片
+        Utils.saveViewAsPicture(mCard, dir + fileName,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        // 保存成功，启动分享功能
+                        Utils.share(new File(dir + fileName), Utils.FILE_TYPE_IMAGE);
+                    }
+                }, null);
     }
 
     @Override

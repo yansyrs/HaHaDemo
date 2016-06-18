@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.yan.haha.adapter.JokeAdapter;
 import com.yan.haha.units.Jokes;
 import com.yan.haha.utils.GetJoke;
+import com.yan.haha.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -60,7 +61,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.joke_menu, menu);
+        inflater.inflate(R.menu.favorite_menu, menu);
         mMenuButton = (ImageView) menu.findItem(R.id.joke_favorite_action).getActionView();
         setJokeMenuButtonBackground();
         mMenuButton.setOnClickListener(new View.OnClickListener() {
@@ -78,11 +79,11 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
         if(tmpCursor.moveToNext() && tmpCursor.getInt(0) > 0) {
             tmpCursor = db.rawQuery("SELECT count(*) FROM "+TABLE_NAME, null);
             if(tmpCursor.moveToNext() && tmpCursor.getInt(0) > 0)
-                mMenuButton.setBackgroundResource(R.drawable.ic_favorite_red);
+                mMenuButton.setBackgroundResource(R.drawable.ic_appbar_favorite_red);
             else
-                mMenuButton.setBackgroundResource(R.drawable.ic_favorite_white);
+                mMenuButton.setBackgroundResource(R.drawable.ic_appbar_favorite_white);
         }else {
-            mMenuButton.setBackgroundResource(R.drawable.ic_favorite_white);
+            mMenuButton.setBackgroundResource(R.drawable.ic_appbar_favorite_white);
         }
         tmpCursor.close();
         db.close();
