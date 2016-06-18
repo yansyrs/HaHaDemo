@@ -48,7 +48,6 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
 
     private View mPreExpandedView = null;
     private int mCurrExpandedPosition = -1;
-    protected Context mContext;
 
     private AppBarFavoriteUpdater mAppBarUpdater = null;
 
