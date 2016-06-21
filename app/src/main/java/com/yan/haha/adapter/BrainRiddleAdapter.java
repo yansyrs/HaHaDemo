@@ -101,6 +101,10 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
                 }
                 db.closeDatabase();
             }
+        } else if (mIsFavoriteMode && mBrainData != null) {
+            for (BrainRiddle riddle : mBrainData) {
+                riddle.setFavorite(true);
+            }
         }
     }
 
@@ -248,14 +252,13 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         db.openDatabase();
         if (isNowFavorite) {
             db.deleteRiddle(mBrainData.get(position));
+            mBrainData.get(position).setFavorite(false);
             if (mIsFavoriteMode) {
                 deleteItem(position, null);
             } else {
                 view.setImageResource(R.drawable.ic_favorite_white);
             }
-            mBrainData.get(position).setFavorite(false);
         } else {
-            Log.i("yan", "saveRiddle");
             db.saveRiddle(mBrainData.get(position));
             view.setImageResource(R.drawable.ic_favorite_red);
             mBrainData.get(position).setFavorite(true);
@@ -374,6 +377,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
     }
 
     public void deleteItem(int position, Runnable finishCallback) {
+        mBrainData.remove(position);
         mLastBindPosition = position - 1;
         mDelPosMark = position;
         ViewHolder holder = mHolderList.get(position);
@@ -385,4 +389,5 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         mCurrExpandedPosition = -1;
         notifyDataSetChanged();
     }
+
 }

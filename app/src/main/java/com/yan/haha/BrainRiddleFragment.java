@@ -48,14 +48,15 @@ public class BrainRiddleFragment extends ContentFragment
     private LoadingState mLoadState = LoadingState.IDLE;
     private boolean mIsFabShown = true;
 
-    private boolean mFirstRun = true;
-
     private MenuItemAnim mMenuItemAnim;
     private ImageView mMenuButton;
+
+    private boolean mViewJustCreated = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mViewJustCreated = true;
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.brain_riddle_fragment, container, false);
     }
@@ -64,8 +65,7 @@ public class BrainRiddleFragment extends ContentFragment
     public void onStart() {
         super.onStart();
 
-        if (mFirstRun) {
-            mFirstRun = false;
+        if (mViewJustCreated && mRiddleData.size() == 0) {
             mAdapter = new BrainRiddleAdapter(getActivity());
             mAdapter.setOnAppBarFavoriteUpdater(this);
 
@@ -79,7 +79,20 @@ public class BrainRiddleFragment extends ContentFragment
             mBrainRiddleList.setAdapter(mAdapter);
 
             doGetBrainRiddles();
+        } else if (mViewJustCreated) {
+            initViews();
+            mContentLoadingImg.setVisibility(View.GONE);
+            mFab.setVisibility(View.VISIBLE);
+
+            mBrainRiddleList.setHasFixedSize(true);
+            LinearLayoutManager lm = new LinearLayoutManager(getActivity());
+            lm.setOrientation(LinearLayoutManager.VERTICAL);
+            mBrainRiddleList.setLayoutManager(lm);
+            mBrainRiddleList.setAdapter(mAdapter);
+            mAdapter.refresh();
         }
+
+        mViewJustCreated = false;
     }
 
     @Override
@@ -161,7 +174,6 @@ public class BrainRiddleFragment extends ContentFragment
                             // 隐藏第一次进入时使用的加载图标
                             if (mContentLoadingImg.getVisibility() == View.VISIBLE) {
                                 mContentLoadingImg.setVisibility(View.GONE);
-                            } else {
                             }
 
                             // 用动画弹出 FAB 按钮

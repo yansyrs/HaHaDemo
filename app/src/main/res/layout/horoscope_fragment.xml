@@ -99,7 +99,7 @@
                         android:layout_marginTop="-5dp"
                         android:layout_below="@id/horoscope_summary"
                         style="?android:attr/buttonBarButtonStyle"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/black"
                         android:layout_alignParentRight="true"
                         android:text="2016.06.01" />
                 </RelativeLayout>

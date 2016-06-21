@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,9 +61,9 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
     private ImageView mJokeContentLoadingImg = null;
     private ImageView mBrainRiddleContentLoadingImg = null;
     private ImageView mHoroscopeContentLoadingImg = null;
-    private CardView mJokeCardView;
+    private ViewGroup mJokeCardView;
     private TextView mJokeTextView;
-    private CardView mBrainRiddleCardView;
+    private ViewGroup mBrainRiddleCardView;
     private TextView mBrainRiddleTextView;
     private CardView mHoroscopeCardView;
     private String mHoroscopeName = "水瓶座";
@@ -112,14 +113,13 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
     }
 
     private void initViews() {
-        mJokeCardView = (CardView) getActivity().findViewById(R.id.joke_card);
+        mJokeCardView = (ViewGroup) getActivity().findViewById(R.id.joke_card);
         mHoroscopeCardView = (CardView) getActivity().findViewById(R.id.horoscope_card);
-        mBrainRiddleCardView = (CardView) getActivity().findViewById(R.id.riddle_card);
+        mBrainRiddleCardView = (ViewGroup) getActivity().findViewById(R.id.riddle_card);
         mHoroscopeBgImg = (ImageView) getActivity().findViewById(R.id.horoscope_bg);
         mHoroscopeAvatarImg = (ImageView) getActivity().findViewById(R.id.horoscope_avatar);
         mHoroscopeTitle = (TextView) getActivity().findViewById(R.id.horoscope_title);
         mHoroscopeSummary = (TextView) getActivity().findViewById(R.id.horoscope_summary);
-        mBrainRiddleCardView = (CardView) getActivity().findViewById(R.id.riddle_card);
         mJokeTextView = (TextView) getActivity().findViewById(R.id.one_joke);
         mBrainRiddleTextView = (TextView) getActivity().findViewById(R.id.one_riddle);
         mJokeContentLoadingImg = (ImageView) getActivity().findViewById(R.id.joke_loading);
@@ -193,6 +193,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         mHoroscopeAvatarImg.setImageResource(avatarRes);
 
         Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(getActivity(), bgRes)).getBitmap();
+        /*
         if (bitmap != null) {
             Utils.getBitmapColor(bitmap, new Utils.BitmapColorCallback(){
                 @Override
@@ -206,6 +207,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                 }
             });
         }
+        */
     }
 
     private GetJoke getJokeProcess() {
