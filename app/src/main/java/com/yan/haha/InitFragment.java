@@ -80,6 +80,9 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
     private Button mBrainRiddleShareButton = null;
     private View mPermissionView = null;
 
+    private int mHoroscopeBgRes = -1;
+    private int mHoroscopeAvatarRes = -1;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,12 +98,14 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
             mJokeCardView.setVisibility(View.INVISIBLE);
             doGetJokes();
         }else {
+            mJokeContentLoadingImg.setVisibility(View.GONE);
             mJokeTextView.setText(mJokeData.get(0).getBody());
         }
         if(mRiddleData.size() == 0) {
             mBrainRiddleCardView.setVisibility(View.INVISIBLE);
             doGetBrainRiddles();
         }else {
+            mBrainRiddleContentLoadingImg.setVisibility(View.GONE);
             mBrainRiddleTextView.setText(mRiddleData.get(0).getQuestion());
         }
         if (mHoroscope == null) {
@@ -183,17 +188,25 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         int bgNum = Utils.getRandomNumber(1, 4);
         int avatarNum = Utils.getRandomNumber(1, 2);
         String name = HoroscopeInfo.getLatinName(mHoroscopeName);
-        int bgRes = Utils.getResourceIdByName(
-                "horoscope_bg_" + bgNum,
-                "drawable");
-        int avatarRes = Utils.getResourceIdByName(
-                "ic_horoscope_" + name + "_" + avatarNum,
-                "drawable");
-        mHoroscopeBgImg.setImageResource(bgRes);
-        mHoroscopeAvatarImg.setImageResource(avatarRes);
+        if (mHoroscopeBgRes == -1) {
+            mHoroscopeBgRes = Utils.getResourceIdByName(
+                    "horoscope_bg_" + bgNum,
+                    "drawable");
+        }
+        if (mHoroscopeAvatarRes == -1) {
+            mHoroscopeAvatarRes = Utils.getResourceIdByName(
+                    "ic_horoscope_" + name + "_" + avatarNum,
+                    "drawable");
+        }
+        if (mHoroscopeBgRes != -1) {
+            mHoroscopeBgImg.setImageResource(mHoroscopeBgRes);
+        }
+        if (mHoroscopeAvatarRes != -1) {
+            mHoroscopeAvatarImg.setImageResource(mHoroscopeAvatarRes);
+        }
 
-        Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(getActivity(), bgRes)).getBitmap();
         /*
+        Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(getActivity(), bgRes)).getBitmap();
         if (bitmap != null) {
             Utils.getBitmapColor(bitmap, new Utils.BitmapColorCallback(){
                 @Override
@@ -409,13 +422,12 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         mHoroscopeSummary.setText(mHoroscope.getSummary());
         mHoroscopeCardView.setVisibility(View.VISIBLE);
 
+        mHoroscopeCardView.setAlpha(0f);
         ViewPropertyAnimator animator = mHoroscopeCardView.animate();
         animator.setDuration(1000)
+                .alpha(1f)
                 .setListener(null)
                 .setInterpolator(new DecelerateInterpolator(3f));
-            mHoroscopeCardView.setAlpha(0f);
-            animator.alpha(1f);
-
         animator.start();
     }
 

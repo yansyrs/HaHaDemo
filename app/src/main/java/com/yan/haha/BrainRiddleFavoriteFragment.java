@@ -1,6 +1,7 @@
 package com.yan.haha;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +25,16 @@ public class BrainRiddleFavoriteFragment extends ContentFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final ActionBarDrawerToggle toggle = MainActivity.getInstance().toggle;
+        toggle.setDrawerIndicatorEnabled(false);
+        toggle.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white);
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.getInstance().onBackPressed();
+                toggle.setDrawerIndicatorEnabled(true);
+            }
+        });
         return inflater.inflate(R.layout.brain_riddle_favorite_fragment, container, false);
     }
 
