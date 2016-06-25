@@ -3,6 +3,11 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/home" />
+
+        <item
             android:id="@+id/nav_brain_riddles"
             android:icon="@drawable/ic_menu_brain_riddle"
             android:title="@string/brain_riddles" />
@@ -14,10 +19,6 @@
             android:id="@+id/nav_horoscope"
             android:icon="@drawable/ic_menu_horoscope"
             android:title="@string/horoscope" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
     </group>
 
     <item android:title="Communicate">
