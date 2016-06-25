@@ -40,12 +40,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 
 public class InitFragment extends ContentFragment implements View.OnClickListener{
     private static final String TAG = "InitFragment";
     private static int REQUEST_PAGE = 1;
-    private int jokeNum = 1;
+    private int jokeNum = 10;
     private final static int RANDOM_COUNT = 1;//10;
     private ArrayList<Jokes> mJokeData = new ArrayList<Jokes>();
     private ArrayList<BrainRiddle> mRiddleData = new ArrayList<BrainRiddle>();
@@ -82,6 +83,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
 
     private int mHoroscopeBgRes = -1;
     private int mHoroscopeAvatarRes = -1;
+    private int mRandomJokeNum = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,11 +97,12 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         super.onStart();
         initViews();
         if (mJokeData.size() == 0) {
+            mRandomJokeNum = Math.abs(new Random().nextInt())%10;
             mJokeCardView.setVisibility(View.INVISIBLE);
             doGetJokes();
         }else {
             mJokeContentLoadingImg.setVisibility(View.GONE);
-            mJokeTextView.setText(mJokeData.get(0).getBody());
+            mJokeTextView.setText(mJokeData.get(mRandomJokeNum).getBody());
         }
         if(mRiddleData.size() == 0) {
             mBrainRiddleCardView.setVisibility(View.INVISIBLE);
@@ -185,7 +188,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                 MainActivity.getInstance().setTitle(getString(R.string.jokes));
                 break;
             case R.id.joke_share:
-                Utils.share(getActivity(),mJokeData.get(0).getBody());
+                Utils.share(getActivity(),mJokeData.get(mRandomJokeNum).getBody());
                 break;
             default:
                 break;
@@ -329,7 +332,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                             // 网络请求成功，加载数据到列表
                             if (mJokeLoadState == LoadingState.LOAD_SUCCESS) {
                                 mJokeCardView.setVisibility(View.VISIBLE);
-                                mJokeTextView.setText(mJokeData.get(0).getBody());
+                                mJokeTextView.setText(mJokeData.get(mRandomJokeNum).getBody());
                             }
 
                             // 隐藏第一次进入时使用的加载图标
