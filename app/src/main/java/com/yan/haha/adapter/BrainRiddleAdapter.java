@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
 
     private View mPreExpandedView = null;
     private int mCurrExpandedPosition = -1;
+    private int mPositionX = 0;
+    private int mPositionY = 0;
 
     private AppBarFavoriteUpdater mAppBarUpdater = null;
 
@@ -182,7 +185,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
     private void expandView(final View view, int width, int height) {
         if (Build.VERSION.SDK_INT >= 21 && view.isAttachedToWindow()) {
             Animator anim = ViewAnimationUtils.createCircularReveal(
-                    view, width / 2, height / 2, 0, width);
+                    view, mPositionX, mPositionY, 0, width);
             anim.setDuration(CIRCULAR_REVEAL_DURATION);
             anim.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -203,7 +206,7 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
     private void collapseView(final View view, int width, int height) {
         if (Build.VERSION.SDK_INT >= 21 && view.isAttachedToWindow()) {
             Animator anim = ViewAnimationUtils.createCircularReveal(
-                    view, width / 2, height / 2, width, 0);
+                    view, mPositionX, mPositionY, width, 0);
             anim.setDuration(CIRCULAR_REVEAL_DURATION);
             anim.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -330,6 +333,16 @@ public class BrainRiddleAdapter extends RecyclerView.Adapter<BrainRiddleAdapter.
         container.setTranslationX(0);
 
         // 设置菜单项点击事件
+        container.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v,MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mPositionX = (int)event.getX();
+                    mPositionY = (int)event.getY();
+                }
+                return false;
+            }
+        });
         container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
