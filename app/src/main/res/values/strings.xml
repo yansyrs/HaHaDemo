@@ -1,11 +1,13 @@
 <resources>
-    <string name="app_name">HaHaDemo</string>
+    <string name="app_name">HaHa</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="home">Home Page</string>
     <string name="action_settings">Settings</string>
+    <string name="about">About</string>
+    <string name="others">Others</string>
 
     <string name="load_success">Load successfully.</string>
     <string name="load_failed">Load unsuccessfully!</string>

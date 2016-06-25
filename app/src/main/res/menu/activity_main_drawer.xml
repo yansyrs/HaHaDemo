@@ -21,16 +21,16 @@
             android:title="@string/horoscope" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/others">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="@string/share" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_menu_about"
+                android:title="@string/about" />
         </menu>
     </item>
 

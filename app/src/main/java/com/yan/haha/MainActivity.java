@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
             setTitle(getString(R.string.horoscope));
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_about) {
 
         }
 
