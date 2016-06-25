@@ -31,6 +31,7 @@ import com.yan.haha.units.BrainRiddle;
 import com.yan.haha.units.Horoscope;
 import com.yan.haha.units.HoroscopeInfo;
 import com.yan.haha.units.Jokes;
+import com.yan.haha.utils.Config;
 import com.yan.haha.utils.GetBrainRiddle;
 import com.yan.haha.utils.GetHoroscope;
 import com.yan.haha.utils.GetJoke;
@@ -84,6 +85,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
     private int mHoroscopeBgRes = -1;
     private int mHoroscopeAvatarRes = -1;
     private int mRandomJokeNum = 0;
+    private boolean mHoroscopeChanged = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,12 +97,17 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
     @Override
     public void onStart() {
         super.onStart();
+        String horoscopeName = Config.getString(Config.KEY_HOROSCOPE, mHoroscopeName);
+        if (!horoscopeName.equals(mHoroscopeName)) {
+            mHoroscopeName = horoscopeName;
+            mHoroscopeChanged = true;
+        }
         initViews();
         if (mJokeData.size() == 0) {
             mRandomJokeNum = Math.abs(new Random().nextInt())%10;
             mJokeCardView.setVisibility(View.INVISIBLE);
             doGetJokes();
-        }else {
+        } else {
             mJokeContentLoadingImg.setVisibility(View.GONE);
             mJokeTextView.setText(mJokeData.get(mRandomJokeNum).getBody());
         }
@@ -111,9 +118,10 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
             mBrainRiddleContentLoadingImg.setVisibility(View.GONE);
             mBrainRiddleTextView.setText(mRiddleData.get(0).getQuestion());
         }
-        if (mHoroscope == null) {
+        if (mHoroscope == null || mHoroscopeChanged) {
             mHoroscopeCardView.setVisibility(View.INVISIBLE);
             doGetHoroscope();
+            mHoroscopeChanged = false;
         }else {
             showHoroscopeCard();
         }
@@ -199,12 +207,12 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         int bgNum = Utils.getRandomNumber(1, 4);
         int avatarNum = Utils.getRandomNumber(1, 2);
         String name = HoroscopeInfo.getLatinName(mHoroscopeName);
-        if (mHoroscopeBgRes == -1) {
+        if (mHoroscopeBgRes == -1 || mHoroscopeChanged) {
             mHoroscopeBgRes = Utils.getResourceIdByName(
                     "horoscope_bg_" + bgNum,
                     "drawable");
         }
-        if (mHoroscopeAvatarRes == -1) {
+        if (mHoroscopeAvatarRes == -1 || mHoroscopeChanged) {
             mHoroscopeAvatarRes = Utils.getResourceIdByName(
                     "ic_horoscope_" + name + "_" + avatarNum,
                     "drawable");
