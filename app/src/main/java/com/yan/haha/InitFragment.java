@@ -164,6 +164,14 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                 shareHoroscope();
                 break;
             case R.id.riddle_card:
+                mBrainRiddleTextView.setAlpha(0);
+                if(mBrainRiddleTextView.getText().equals(mRiddleData.get(0).getQuestion()))
+                    mBrainRiddleTextView.setText(mRiddleData.get(0).getAnswer());
+                else
+                    mBrainRiddleTextView.setText(mRiddleData.get(0).getQuestion());
+                mBrainRiddleTextView.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.alpha));
+                mBrainRiddleTextView.setAlpha(1);
+                break;
             case R.id.riddle_more:
                 MainActivity.getInstance().replaceContentFragment(new BrainRiddleFragment(),true);
                 MainActivity.getInstance().setTitle(getString(R.string.brain_riddles));
