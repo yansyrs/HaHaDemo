@@ -78,10 +78,13 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
     private TextView mHoroscopeDate = null;
     private Button mJokeMoreButton = null;
     private Button mJokeShareButton = null;
+    private Button mJokeReloadButton = null;
     private Button mHoroscopeMoreButton = null;
     private Button mHoroscopeShareButton = null;
+    private Button mHoroscopeReloadButton = null;
     private Button mBrainRiddleMoreButton = null;
     private Button mBrainRiddleShareButton = null;
+    private Button mBrainRiddleReloadButton = null;
     private View mPermissionView = null;
     private SmoothProgressBar mLoadingProgressBar = null;
 
@@ -150,10 +153,13 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         mHoroscopeDate = (TextView) getActivity().findViewById(R.id.horoscope_date);
         mJokeMoreButton = (Button) getActivity().findViewById(R.id.joke_more);
         mJokeShareButton = (Button) getActivity().findViewById(R.id.joke_share);
+        mJokeReloadButton = (Button) getActivity().findViewById(R.id.joke_reload);
         mHoroscopeMoreButton = (Button) getActivity().findViewById(R.id.horoscope_more);
         mHoroscopeShareButton = (Button) getActivity().findViewById(R.id.horoscope_share);
+        mHoroscopeReloadButton = (Button) getActivity().findViewById(R.id.horoscope_reload);
         mBrainRiddleMoreButton = (Button) getActivity().findViewById(R.id.riddle_more);
         mBrainRiddleShareButton = (Button) getActivity().findViewById(R.id.riddle_share);
+        mBrainRiddleReloadButton = (Button) getActivity().findViewById(R.id.riddle_reload);
         mLoadingProgressBar = (SmoothProgressBar) getActivity().findViewById(R.id.init_loading);
         setHoroscopeCardView();
         mHoroscopeDate.setEnabled(false);
@@ -162,12 +168,15 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         mHoroscopeCardView.setOnClickListener(this);
         mHoroscopeMoreButton.setOnClickListener(this);
         mHoroscopeShareButton.setOnClickListener(this);
+        mHoroscopeReloadButton.setOnClickListener(this);
         mBrainRiddleCardView.setOnClickListener(this);
         mBrainRiddleMoreButton.setOnClickListener(this);
         mBrainRiddleShareButton.setOnClickListener(this);
+        mBrainRiddleReloadButton.setOnClickListener(this);
         mJokeCardView.setOnClickListener(this);
         mJokeMoreButton.setOnClickListener(this);
         mJokeShareButton.setOnClickListener(this);
+        mJokeReloadButton.setOnClickListener(this);
         if (mIsProgressBarShown) {
             mLoadingProgressBar.setVisibility(View.VISIBLE);
         } else {
@@ -198,6 +207,9 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
             case R.id.horoscope_share:
                 shareHoroscope();
                 break;
+            case R.id.horoscope_reload:
+                doGetHoroscope();
+                break;
             case R.id.riddle_card:
                 mBrainRiddleTextView.setAlpha(0);
                 if(mBrainRiddleTextView.getText().equals(mRiddleData.get(0).getQuestion()))
@@ -214,6 +226,9 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
             case R.id.riddle_share:
                 Utils.share(getActivity(),mRiddleData.get(0).getQuestion());
                 break;
+            case R.id.riddle_reload:
+                doGetBrainRiddles();
+                break;
             case R.id.joke_card:
             case R.id.joke_more:
                 MainActivity.getInstance().replaceContentFragment(new JokeFragment(),true);
@@ -221,6 +236,9 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                 break;
             case R.id.joke_share:
                 Utils.share(getActivity(),mJokeData.get(mRandomJokeNum).getBody());
+                break;
+            case R.id.joke_reload:
+                doGetJokes();
                 break;
             default:
                 break;
@@ -353,6 +371,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         } else {
             loadingView.setVisibility(View.VISIBLE);
         }
+        mJokeReloadButton.setVisibility(View.GONE);
         loadingView.setRotation(0f);
         ViewPropertyAnimator ani = loadingView.animate()
                 .rotation(360f)
@@ -370,9 +389,11 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                             if (mJokeLoadState == LoadingState.LOAD_SUCCESS) {
                                 mJokeCardView.setVisibility(View.VISIBLE);
                                 mJokeTextView.setText(mJokeData.get(mRandomJokeNum).getBody());
+                            } else if (mJokeLoadState == LoadingState.LOAD_FAIL){
+                                mJokeReloadButton.setVisibility(View.VISIBLE);
                             }
 
-                            // 隐藏第一次进入时使用的加载图标
+                            // 隐藏加载图标
                             if (loadingView.getVisibility() == View.VISIBLE) {
                                 loadingView.setVisibility(View.GONE);
                             }
@@ -401,6 +422,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         } else {
             loadingView.setVisibility(View.VISIBLE);
         }
+        mBrainRiddleReloadButton.setVisibility(View.GONE);
         loadingView.setRotation(0f);
         ViewPropertyAnimator ani = loadingView.animate()
                 .rotation(360f)
@@ -418,9 +440,11 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                             if (mBrainRiddleLoadState == LoadingState.LOAD_SUCCESS) {
                                 mBrainRiddleCardView.setVisibility(View.VISIBLE);
                                 mBrainRiddleTextView.setText(mRiddleData.get(0).getQuestion());
+                            } else if (mBrainRiddleLoadState == LoadingState.LOAD_FAIL){
+                                mBrainRiddleReloadButton.setVisibility(View.VISIBLE);
                             }
 
-                            // 隐藏第一次进入时使用的加载图标
+                            // 隐藏加载图标
                             if (loadingView.getVisibility() == View.VISIBLE) {
                                 loadingView.setVisibility(View.GONE);
                             }
@@ -445,6 +469,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         } else {
             mLoadingView.setVisibility(View.VISIBLE);
         }
+        mHoroscopeReloadButton.setVisibility(View.GONE);
         mLoadingView.setRotation(0f);
         mLoadingView.animate()
                 .rotation(360f)
@@ -463,6 +488,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                             } else if (mHoroscopeLoadState == LoadingState.LOAD_FAIL){
                                 // 网络请求失败
                                 mLoadingView.setVisibility(View.GONE);
+                                mHoroscopeReloadButton.setVisibility(View.VISIBLE);
                             }
                             mHoroscopeLoadState = LoadingState.IDLE;
 
