@@ -6,6 +6,9 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+    
+    <style name="SPB" parent="android:Widget.Material.ProgressBar.Horizontal">
+    </style>
 
     <style name="details_label_colored">
         <item name="android:layout_width">wrap_content</item>

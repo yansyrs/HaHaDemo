@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 
 public class InitFragment extends ContentFragment implements View.OnClickListener{
     private static final String TAG = "InitFragment";
@@ -80,10 +82,13 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
     private Button mBrainRiddleMoreButton = null;
     private Button mBrainRiddleShareButton = null;
     private View mPermissionView = null;
+    private SmoothProgressBar mLoadingProgressBar = null;
 
     private int mHoroscopeBgRes = -1;
     private int mHoroscopeAvatarRes = -1;
     private boolean mHoroscopeChanged = false;
+
+    private boolean mIsProgressBarShown = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,6 +100,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
     @Override
     public void onStart() {
         super.onStart();
+        getActivity().setTitle(getString(R.string.app_name));
         String horoscopeName = Config.getString(Config.KEY_HOROSCOPE, mHoroscopeName);
         if (!horoscopeName.equals(mHoroscopeName)) {
             mHoroscopeName = horoscopeName;
@@ -108,10 +114,10 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
             mJokeContentLoadingImg.setVisibility(View.GONE);
             mJokeTextView.setText(mJokeData.get(0).getBody());
         }
-        if(mRiddleData.size() == 0) {
+        if (mRiddleData.size() == 0) {
             mBrainRiddleCardView.setVisibility(View.INVISIBLE);
             doGetBrainRiddles();
-        }else {
+        } else {
             mBrainRiddleContentLoadingImg.setVisibility(View.GONE);
             mBrainRiddleTextView.setText(mRiddleData.get(0).getQuestion());
         }
@@ -119,7 +125,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
             mHoroscopeCardView.setVisibility(View.INVISIBLE);
             doGetHoroscope();
             mHoroscopeChanged = false;
-        }else {
+        } else {
             showHoroscopeCard();
         }
 
@@ -145,6 +151,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         mHoroscopeShareButton = (Button) getActivity().findViewById(R.id.horoscope_share);
         mBrainRiddleMoreButton = (Button) getActivity().findViewById(R.id.riddle_more);
         mBrainRiddleShareButton = (Button) getActivity().findViewById(R.id.riddle_share);
+        mLoadingProgressBar = (SmoothProgressBar) getActivity().findViewById(R.id.init_loading);
         setHoroscopeCardView();
         mHoroscopeDate.setEnabled(false);
         Date date = new Date(System.currentTimeMillis());
@@ -158,7 +165,24 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
         mJokeCardView.setOnClickListener(this);
         mJokeMoreButton.setOnClickListener(this);
         mJokeShareButton.setOnClickListener(this);
+        if (mIsProgressBarShown) {
+            mLoadingProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            mLoadingProgressBar.setVisibility(View.GONE);
+        }
+    }
 
+    private void hideProgressBarIfNotLoading() {
+        if (mHoroscopeLoadState != LoadingState.LOADING
+                && mJokeLoadState != LoadingState.LOADING
+                && mBrainRiddleLoadState != LoadingState.LOADING) {
+            mLoadingProgressBar.setVisibility(View.GONE);
+            mIsProgressBarShown = false;
+        }
+    }
+
+    private boolean isProgressBarShown() {
+        return mIsProgressBarShown;
     }
 
     public void onClick(View view) {
@@ -261,7 +285,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
 
             @Override
             public void onDataFailed() {
-
+                mBrainRiddleLoadState = LoadingState.LOAD_FAIL;
             }
         });
         return process;
@@ -302,7 +326,7 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
 
                 @Override
                 public void onDataFailed() {
-
+                    mHoroscopeLoadState = LoadingState.LOAD_FAIL;
                 }
             });
             mHoroscopeLoadState = LoadingState.LOADING;
@@ -313,6 +337,11 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
 
     private void doGetJokeAnimate() {
         final View loadingView = mJokeContentLoadingImg;
+        if (isProgressBarShown()) {
+            loadingView.setVisibility(View.GONE);
+        } else {
+            loadingView.setVisibility(View.VISIBLE);
+        }
         loadingView.setRotation(0f);
         ViewPropertyAnimator ani = loadingView.animate()
                 .rotation(360f)
@@ -333,11 +362,12 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                             }
 
                             // 隐藏第一次进入时使用的加载图标
-                            if (mJokeContentLoadingImg.getVisibility() == View.VISIBLE) {
-                                mJokeContentLoadingImg.setVisibility(View.GONE);
-                            } else {
+                            if (loadingView.getVisibility() == View.VISIBLE) {
+                                loadingView.setVisibility(View.GONE);
                             }
                             mJokeLoadState = LoadingState.IDLE;
+
+                            hideProgressBarIfNotLoading();
                         }
                     }
 
@@ -355,6 +385,11 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
 
     private void doGetBrainRiddlesAnimate() {
         final View loadingView = mBrainRiddleContentLoadingImg;
+        if (isProgressBarShown()) {
+            loadingView.setVisibility(View.GONE);
+        } else {
+            loadingView.setVisibility(View.VISIBLE);
+        }
         loadingView.setRotation(0f);
         ViewPropertyAnimator ani = loadingView.animate()
                 .rotation(360f)
@@ -375,12 +410,13 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                             }
 
                             // 隐藏第一次进入时使用的加载图标
-                            if (mBrainRiddleContentLoadingImg.getVisibility() == View.VISIBLE) {
-                                mBrainRiddleContentLoadingImg.setVisibility(View.GONE);
-                            } else {
+                            if (loadingView.getVisibility() == View.VISIBLE) {
+                                loadingView.setVisibility(View.GONE);
                             }
 
                             mBrainRiddleLoadState = LoadingState.IDLE;
+
+                            hideProgressBarIfNotLoading();
                         }
                     }
 
@@ -393,7 +429,11 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
 
     private void doGetHoroscopeAnimate() {
         final View mLoadingView = mHoroscopeContentLoadingImg;
-        mLoadingView.setVisibility(View.VISIBLE);
+        if (isProgressBarShown()) {
+            mLoadingView.setVisibility(View.GONE);
+        } else {
+            mLoadingView.setVisibility(View.VISIBLE);
+        }
         mLoadingView.setRotation(0f);
         mLoadingView.animate()
                 .rotation(360f)
@@ -411,9 +451,11 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                                 showHoroscopeCard();
                             } else if (mHoroscopeLoadState == LoadingState.LOAD_FAIL){
                                 // 网络请求失败
-                                mLoadingView.setVisibility(View.INVISIBLE);
+                                mLoadingView.setVisibility(View.GONE);
                             }
                             mHoroscopeLoadState = LoadingState.IDLE;
+
+                            hideProgressBarIfNotLoading();
                         }
                     }
 
