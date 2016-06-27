@@ -389,6 +389,11 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                             if (mJokeLoadState == LoadingState.LOAD_SUCCESS) {
                                 mJokeCardView.setVisibility(View.VISIBLE);
                                 mJokeTextView.setText(mJokeData.get(mRandomJokeNum).getBody());
+                                mJokeCardView.setAlpha(0);
+                                mJokeCardView.animate()
+                                        .alpha(1f)
+                                        .setInterpolator(new DecelerateInterpolator(3f))
+                                        .setDuration(1000).start();
                             } else if (mJokeLoadState == LoadingState.LOAD_FAIL){
                                 mJokeReloadButton.setVisibility(View.VISIBLE);
                             }
@@ -440,6 +445,11 @@ public class InitFragment extends ContentFragment implements View.OnClickListene
                             if (mBrainRiddleLoadState == LoadingState.LOAD_SUCCESS) {
                                 mBrainRiddleCardView.setVisibility(View.VISIBLE);
                                 mBrainRiddleTextView.setText(mRiddleData.get(0).getQuestion());
+                                mBrainRiddleCardView.setAlpha(0);
+                                mBrainRiddleCardView.animate()
+                                        .alpha(1f)
+                                        .setInterpolator(new DecelerateInterpolator(3f))
+                                        .setDuration(1000).start();
                             } else if (mBrainRiddleLoadState == LoadingState.LOAD_FAIL){
                                 mBrainRiddleReloadButton.setVisibility(View.VISIBLE);
                             }
