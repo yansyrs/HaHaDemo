@@ -10,7 +10,7 @@
     <string name="others">Others</string>
 
     <string name="load_success">Load successfully.</string>
-    <string name="load_failed">Load unsuccessfully!</string>
+    <string name="load_failed">Load fail!</string>
     <string name="share">Share</string>
     <string name="more">More</string>
     <string name="reload">Reload</string>
