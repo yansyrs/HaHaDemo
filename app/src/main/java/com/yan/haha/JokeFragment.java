@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     protected static final String TABLE_NAME = "Jokes";
     private MenuItemAnim mMenuItemAnim;
     private ImageView mMenuButton;
+    private Button mReloadBtn = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -165,6 +167,10 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
                                 mAdapter.setJokeList(mJokeData);
                                 mJokeList.scrollToPosition(0);
                                 mAdapter.refresh();
+                            } else if (mLoadState == LoadingState.LOAD_FAIL){
+                                // 网络请求失败
+                                loadingView.setVisibility(View.INVISIBLE);
+                                mReloadBtn.setVisibility(View.VISIBLE);
                             }
 
                             // 隐藏第一次进入时使用的加载图标
@@ -186,7 +192,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
                                         .start();
                             }
                             Toast.makeText(getActivity(), (mLoadState == LoadingState.LOAD_SUCCESS)
-                                    ? R.string.load_success : R.string.load_failed, Toast.LENGTH_SHORT)
+                                    ? R.string.load_success:R.string.load_failed, Toast.LENGTH_SHORT)
                                     .show();
                             mLoadState = LoadingState.IDLE;
                         }
@@ -207,6 +213,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
     private void doGetJokes() {
         if (mLoadState != LoadingState.LOADING) {
             mLoadState = LoadingState.LOADING;
+            mReloadBtn.setVisibility(View.INVISIBLE);
             // 创建网络请求
             mJokeRequest = getJokeProcess();
             mJokeRequest.execute();
@@ -247,7 +254,7 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
 
     private void initViews() {
         mJokeList = (RecyclerView) getActivity().findViewById(R.id.joke_list);
-
+        mReloadBtn = (Button) getActivity().findViewById(R.id.joke_reload);
         mFab = (FloatingActionButton) getActivity()
                 .findViewById(R.id.joke_fab);
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -271,6 +278,14 @@ public class JokeFragment extends ContentFragment implements OnDataFinishedListe
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+
+        mReloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doGetJokes();
+            }
+        });
+        mReloadBtn.setVisibility(View.INVISIBLE);
     }
 
     @Override

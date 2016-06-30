@@ -25,4 +25,14 @@
         android:layout_gravity="center"
         android:src="@android:drawable/stat_notify_sync"
         android:tint="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/joke_reload"
+        android:visibility="invisible"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/reload"
+        android:textColor="@color/colorAccent" />
 </FrameLayout>
