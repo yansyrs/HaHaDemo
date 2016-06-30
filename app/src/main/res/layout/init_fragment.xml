@@ -130,6 +130,16 @@
                 android:layout_centerInParent="true"
                 android:src="@android:drawable/stat_notify_sync"
                 android:tint="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/horoscope_reload"
+                android:visibility="invisible"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/reload"
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -193,6 +203,16 @@
                 android:layout_centerInParent="true"
                 android:src="@android:drawable/stat_notify_sync"
                 android:tint="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/riddle_reload"
+                android:visibility="invisible"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/reload"
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -256,6 +276,16 @@
                 android:layout_centerInParent="true"
                 android:src="@android:drawable/stat_notify_sync"
                 android:tint="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/joke_reload"
+                android:visibility="invisible"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/reload"
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
     </RelativeLayout>
